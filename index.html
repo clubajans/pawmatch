@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>PawMatch 🐾</title>
+<title>PawMatch ğŸ¾</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -59,7 +59,7 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: 13px; font-weight: 700; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* ===== MAIN LAYOUT — MOBILE ===== */
+/* ===== MAIN LAYOUT â€” MOBILE ===== */
 #mainApp { display: flex; flex-direction: column; min-height: 100vh; }
 .topbar { background: white; padding: 14px 20px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
 .topbar-logo { font-family: 'Righteous', sans-serif; font-size: 24px; color: var(--primary); }
@@ -67,7 +67,7 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 .notif-badge { position: absolute; top: 4px; right: 4px; background: var(--primary); color: white; font-size: 10px; font-weight: 800; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .view-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
 
-/* ===== BOTTOM NAV — MOBILE ===== */
+/* ===== BOTTOM NAV â€” MOBILE ===== */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid var(--border); display: flex; z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0 8px; cursor: pointer; color: #bbb; transition: color 0.2s; font-size: 10px; font-weight: 800; letter-spacing: 0.3px; }
 .nav-item .nav-icon { font-size: 22px; margin-bottom: 2px; transition: transform 0.2s; }
@@ -302,59 +302,59 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 
 <!-- ===== AUTH VIEW ===== -->
 <div id="authView">
-  <div class="auth-logo">🐾</div>
+  <div class="auth-logo">ğŸ¾</div>
   <div class="auth-title">PawMatch</div>
-  <div class="auth-sub">Evcil dostların buluşma noktası</div>
+  <div class="auth-sub">Evcil dostlarÄ±n buluÅŸma noktasÄ±</div>
   <div class="auth-card">
     <div class="tab-btns">
-      <button class="tab-btn active" onclick="switchAuthTab('login')">Giriş Yap</button>
-      <button class="tab-btn" onclick="switchAuthTab('register')">Kayıt Ol</button>
+      <button class="tab-btn active" onclick="switchAuthTab('login')">GiriÅŸ Yap</button>
+      <button class="tab-btn" onclick="switchAuthTab('register')">KayÄ±t Ol</button>
     </div>
     <!-- Login -->
     <div id="loginForm">
       <button class="btn-google" onclick="doGoogleLogin()">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        Google ile Giriş Yap
+        Google ile GiriÅŸ Yap
       </button>
       <div class="auth-divider">veya</div>
       <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="ornek@mail.com"></div>
-      <div class="form-group"><label>Şifre</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+      <div class="form-group"><label>Åifre</label><input type="password" id="loginPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
       <div id="loginError" class="error-msg hidden"></div>
-      <button class="btn" onclick="doLogin()" style="margin-top:8px">Giriş Yap 🐾</button>
+      <button class="btn" onclick="doLogin()" style="margin-top:8px">GiriÅŸ Yap ğŸ¾</button>
     </div>
     <!-- Register -->
     <div id="registerForm" class="hidden">
       <button class="btn-google" onclick="doGoogleLogin()">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        Google ile Kayıt Ol
+        Google ile KayÄ±t Ol
       </button>
       <div class="auth-divider">veya e-posta ile</div>
-      <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="Adın Soyadın"></div>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="AdÄ±n SoyadÄ±n"></div>
       <div class="form-group"><label>E-posta</label><input type="email" id="regEmail" placeholder="ornek@mail.com"></div>
-      <div class="form-group"><label>Şifre</label><input type="password" id="regPass" placeholder="En az 6 karakter"></div>
-      <div class="form-group"><label>Şehir</label>
+      <div class="form-group"><label>Åifre</label><input type="password" id="regPass" placeholder="En az 6 karakter"></div>
+      <div class="form-group"><label>Åehir</label>
         <select id="regCity">
-          <option value="">Şehir Seç</option>
-          <option>Adana</option><option>Adıyaman</option><option>Afyonkarahisar</option><option>Ağrı</option><option>Amasya</option>
-          <option>Ankara</option><option>Antalya</option><option>Artvin</option><option>Aydın</option><option>Balıkesir</option>
-          <option>Bilecik</option><option>Bingöl</option><option>Bitlis</option><option>Bolu</option><option>Burdur</option>
-          <option>Bursa</option><option>Çanakkale</option><option>Çankırı</option><option>Çorum</option><option>Denizli</option>
-          <option>Diyarbakır</option><option>Edirne</option><option>Elazığ</option><option>Erzincan</option><option>Erzurum</option>
-          <option>Eskişehir</option><option>Gaziantep</option><option>Giresun</option><option>Gümüşhane</option><option>Hakkari</option>
-          <option>Hatay</option><option>Isparta</option><option>Mersin</option><option>İstanbul</option><option>İzmir</option>
-          <option>Kars</option><option>Kastamonu</option><option>Kayseri</option><option>Kırklareli</option><option>Kırşehir</option>
-          <option>Kocaeli</option><option>Konya</option><option>Kütahya</option><option>Malatya</option><option>Manisa</option>
-          <option>Kahramanmaraş</option><option>Mardin</option><option>Muğla</option><option>Muş</option><option>Nevşehir</option>
-          <option>Niğde</option><option>Ordu</option><option>Rize</option><option>Sakarya</option><option>Samsun</option>
-          <option>Siirt</option><option>Sinop</option><option>Sivas</option><option>Tekirdağ</option><option>Tokat</option>
-          <option>Trabzon</option><option>Tunceli</option><option>Şanlıurfa</option><option>Uşak</option><option>Van</option>
+          <option value="">Åehir SeÃ§</option>
+          <option>Adana</option><option>AdÄ±yaman</option><option>Afyonkarahisar</option><option>AÄŸrÄ±</option><option>Amasya</option>
+          <option>Ankara</option><option>Antalya</option><option>Artvin</option><option>AydÄ±n</option><option>BalÄ±kesir</option>
+          <option>Bilecik</option><option>BingÃ¶l</option><option>Bitlis</option><option>Bolu</option><option>Burdur</option>
+          <option>Bursa</option><option>Ã‡anakkale</option><option>Ã‡ankÄ±rÄ±</option><option>Ã‡orum</option><option>Denizli</option>
+          <option>DiyarbakÄ±r</option><option>Edirne</option><option>ElazÄ±ÄŸ</option><option>Erzincan</option><option>Erzurum</option>
+          <option>EskiÅŸehir</option><option>Gaziantep</option><option>Giresun</option><option>GÃ¼mÃ¼ÅŸhane</option><option>Hakkari</option>
+          <option>Hatay</option><option>Isparta</option><option>Mersin</option><option>Ä°stanbul</option><option>Ä°zmir</option>
+          <option>Kars</option><option>Kastamonu</option><option>Kayseri</option><option>KÄ±rklareli</option><option>KÄ±rÅŸehir</option>
+          <option>Kocaeli</option><option>Konya</option><option>KÃ¼tahya</option><option>Malatya</option><option>Manisa</option>
+          <option>KahramanmaraÅŸ</option><option>Mardin</option><option>MuÄŸla</option><option>MuÅŸ</option><option>NevÅŸehir</option>
+          <option>NiÄŸde</option><option>Ordu</option><option>Rize</option><option>Sakarya</option><option>Samsun</option>
+          <option>Siirt</option><option>Sinop</option><option>Sivas</option><option>TekirdaÄŸ</option><option>Tokat</option>
+          <option>Trabzon</option><option>Tunceli</option><option>ÅanlÄ±urfa</option><option>UÅŸak</option><option>Van</option>
           <option>Yozgat</option><option>Zonguldak</option><option>Aksaray</option><option>Bayburt</option><option>Karaman</option>
-          <option>Kırıkkale</option><option>Batman</option><option>Şırnak</option><option>Bartın</option><option>Ardahan</option>
-          <option>Iğdır</option><option>Yalova</option><option>Karabük</option><option>Kilis</option><option>Osmaniye</option><option>Düzce</option>
+          <option>KÄ±rÄ±kkale</option><option>Batman</option><option>ÅÄ±rnak</option><option>BartÄ±n</option><option>Ardahan</option>
+          <option>IÄŸdÄ±r</option><option>Yalova</option><option>KarabÃ¼k</option><option>Kilis</option><option>Osmaniye</option><option>DÃ¼zce</option>
         </select>
       </div>
       <div id="registerError" class="error-msg hidden"></div>
-      <button class="btn" onclick="doRegister()" style="margin-top:8px">Kayıt Ol 🐾</button>
+      <button class="btn" onclick="doRegister()" style="margin-top:8px">KayÄ±t Ol ğŸ¾</button>
     </div>
   </div>
 </div>
@@ -362,8 +362,8 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 <!-- ===== MAIN APP ===== -->
 <div id="mainApp" class="hidden">
   <div class="topbar">
-    <div class="topbar-logo">🐾 <span>PawMatch</span></div>
-    <button class="notif-btn" onclick="toggleNotifs()" id="notifBtn">🔔<span class="notif-badge hidden" id="notifBadge">0</span></button>
+    <div class="topbar-logo">ğŸ¾ <span>PawMatch</span></div>
+    <button class="notif-btn" onclick="toggleNotifs()" id="notifBtn">ğŸ””<span class="notif-badge hidden" id="notifBadge">0</span></button>
   </div>
   
   <!-- Notifications Panel -->
@@ -374,51 +374,51 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     <div id="homeView" class="hidden">
       <div style="padding:16px 20px 0" class="mobile-filters">
         <div class="filter-bar" id="filterBar">
-          <button class="filter-chip active" onclick="setFilter('all',this)">Tümü</button>
-          <button class="filter-chip" onclick="setFilter('kedi',this)">🐱 Kedi</button>
-          <button class="filter-chip" onclick="setFilter('köpek',this)">🐶 Köpek</button>
-          <button class="filter-chip" onclick="setFilter('kuş',this)">🐦 Kuş</button>
-          <button class="filter-chip" onclick="setFilter('tavşan',this)">🐰 Tavşan</button>
-          <button class="filter-chip" onclick="setFilter('diğer',this)">🐾 Diğer</button>
+          <button class="filter-chip active" onclick="setFilter('all',this)">TÃ¼mÃ¼</button>
+          <button class="filter-chip" onclick="setFilter('kedi',this)">ğŸ± Kedi</button>
+          <button class="filter-chip" onclick="setFilter('kÃ¶pek',this)">ğŸ¶ KÃ¶pek</button>
+          <button class="filter-chip" onclick="setFilter('kuÅŸ',this)">ğŸ¦ KuÅŸ</button>
+          <button class="filter-chip" onclick="setFilter('tavÅŸan',this)">ğŸ° TavÅŸan</button>
+          <button class="filter-chip" onclick="setFilter('diÄŸer',this)">ğŸ¾ DiÄŸer</button>
         </div>
       </div>
       <!-- Desktop: two columns. Mobile: single column -->
       <div class="home-left">
         <!-- Desktop welcome -->
         <div class="home-welcome desktop-only" id="homeWelcome">
-          <h2>Merhaba! 🐾</h2>
-          <p>Bugün yeni bir dost bulmaya hazır mısın?</p>
+          <h2>Merhaba! ğŸ¾</h2>
+          <p>BugÃ¼n yeni bir dost bulmaya hazÄ±r mÄ±sÄ±n?</p>
         </div>
         <!-- Desktop stats -->
         <div class="home-stats desktop-only" id="homeStats">
-          <div class="stat-card"><div class="stat-num" id="statPets">—</div><div class="stat-label">Toplam Hayvan</div></div>
-          <div class="stat-card"><div class="stat-num" id="statMatches">—</div><div class="stat-label">Eşleşme</div></div>
-          <div class="stat-card"><div class="stat-num" id="statLost">—</div><div class="stat-label">Kayıp İlanı</div></div>
-          <div class="stat-card"><div class="stat-num" id="statShelter">—</div><div class="stat-label">Yuva Arıyor</div></div>
+          <div class="stat-card"><div class="stat-num" id="statPets">â€”</div><div class="stat-label">Toplam Hayvan</div></div>
+          <div class="stat-card"><div class="stat-num" id="statMatches">â€”</div><div class="stat-label">EÅŸleÅŸme</div></div>
+          <div class="stat-card"><div class="stat-num" id="statLost">â€”</div><div class="stat-label">KayÄ±p Ä°lanÄ±</div></div>
+          <div class="stat-card"><div class="stat-num" id="statShelter">â€”</div><div class="stat-label">Yuva ArÄ±yor</div></div>
         </div>
         <!-- Desktop filter -->
         <div class="desktop-only" style="margin-bottom:16px">
           <div class="filter-bar" id="filterBarDesktop">
-            <button class="filter-chip active" onclick="setFilter('all',this)">Tümü</button>
-            <button class="filter-chip" onclick="setFilter('kedi',this)">🐱 Kedi</button>
-            <button class="filter-chip" onclick="setFilter('köpek',this)">🐶 Köpek</button>
-            <button class="filter-chip" onclick="setFilter('kuş',this)">🐦 Kuş</button>
-            <button class="filter-chip" onclick="setFilter('tavşan',this)">🐰 Tavşan</button>
-            <button class="filter-chip" onclick="setFilter('diğer',this)">🐾 Diğer</button>
+            <button class="filter-chip active" onclick="setFilter('all',this)">TÃ¼mÃ¼</button>
+            <button class="filter-chip" onclick="setFilter('kedi',this)">ğŸ± Kedi</button>
+            <button class="filter-chip" onclick="setFilter('kÃ¶pek',this)">ğŸ¶ KÃ¶pek</button>
+            <button class="filter-chip" onclick="setFilter('kuÅŸ',this)">ğŸ¦ KuÅŸ</button>
+            <button class="filter-chip" onclick="setFilter('tavÅŸan',this)">ğŸ° TavÅŸan</button>
+            <button class="filter-chip" onclick="setFilter('diÄŸer',this)">ğŸ¾ DiÄŸer</button>
           </div>
         </div>
         <div class="swipe-area" id="swipeArea">
           <div class="loader"><div class="spinner"></div></div>
         </div>
         <div class="swipe-btns">
-          <button class="swipe-btn pass" onclick="swipePass()" title="Geç">✕</button>
-          <button class="swipe-btn super" onclick="swipeLike(true)" title="Süper Beğen">⭐</button>
-          <button class="swipe-btn like" onclick="swipeLike(false)" title="Beğen">❤️</button>
+          <button class="swipe-btn pass" onclick="swipePass()" title="GeÃ§">âœ•</button>
+          <button class="swipe-btn super" onclick="swipeLike(true)" title="SÃ¼per BeÄŸen">â­</button>
+          <button class="swipe-btn like" onclick="swipeLike(false)" title="BeÄŸen">â¤ï¸</button>
         </div>
       </div>
       <!-- Desktop right panel -->
       <div class="home-right desktop-only" id="homeRight">
-        <h3 style="font-size:18px;margin-bottom:16px;color:var(--text)">🔥 Son Eşleşmeler</h3>
+        <h3 style="font-size:18px;margin-bottom:16px;color:var(--text)">ğŸ”¥ Son EÅŸleÅŸmeler</h3>
         <div id="homeMatchList"><div class="loader"><div class="spinner"></div></div></div>
       </div>
     </div>
@@ -426,9 +426,9 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     <!-- MATCHES VIEW -->
     <div id="matchesView" class="hidden">
       <div class="tabs">
-        <button class="tab active" onclick="switchMatchTab('requests',this)">İstekler</button>
-        <button class="tab" onclick="switchMatchTab('matches',this)">Eşleşmeler</button>
-        <button class="tab" onclick="switchMatchTab('likes',this)">Beğeniler</button>
+        <button class="tab active" onclick="switchMatchTab('requests',this)">Ä°stekler</button>
+        <button class="tab" onclick="switchMatchTab('matches',this)">EÅŸleÅŸmeler</button>
+        <button class="tab" onclick="switchMatchTab('likes',this)">BeÄŸeniler</button>
       </div>
       <div id="matchContent"><div class="loader"><div class="spinner"></div></div></div>
     </div>
@@ -436,39 +436,39 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     <!-- CHAT VIEW -->
     <div id="chatView" class="hidden">
       <div class="chat-header">
-        <button class="chat-back" onclick="showView('matchesView')">←</button>
-        <div class="chat-avatar" id="chatAvatar">🐾</div>
-        <div><div class="chat-name" id="chatName">—</div><div class="chat-status">Online</div></div>
+        <button class="chat-back" onclick="showView('matchesView')">â†</button>
+        <div class="chat-avatar" id="chatAvatar">ğŸ¾</div>
+        <div><div class="chat-name" id="chatName">â€”</div><div class="chat-status">Online</div></div>
       </div>
       <div class="chat-messages" id="chatMessages"></div>
       <div class="chat-input-area">
         <input class="chat-input" id="chatInput" placeholder="Mesaj yaz..." onkeydown="if(event.key==='Enter')sendMessage()">
-        <button class="send-btn" onclick="sendMessage()">➤</button>
+        <button class="send-btn" onclick="sendMessage()">â¤</button>
       </div>
     </div>
 
     <!-- MAP VIEW -->
     <div id="mapView" class="hidden">
-      <h2 class="section-title" style="margin-bottom:12px">🗺️ Yakınımdaki Hayvanlar</h2>
+      <h2 class="section-title" style="margin-bottom:12px">ğŸ—ºï¸ YakÄ±nÄ±mdaki Hayvanlar</h2>
       <div id="map"></div>
       <div class="map-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#FF6B4A"></div>Eşleşme</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>Kayıp</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#2D9B6F"></div>Barınak/Yuva</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#FF6B4A"></div>EÅŸleÅŸme</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>KayÄ±p</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2D9B6F"></div>BarÄ±nak/Yuva</div>
       </div>
       <div id="mapList" style="margin-top:16px"></div>
     </div>
 
     <!-- LOST VIEW -->
     <div id="lostView" class="hidden">
-      <h2 class="section-title">😿 Kayıp & Bulunan İlanları</h2>
+      <h2 class="section-title">ğŸ˜¿ KayÄ±p & Bulunan Ä°lanlarÄ±</h2>
       <div id="lostList"><div class="loader"><div class="spinner"></div></div></div>
     </div>
     <button class="fab" id="lostFab" onclick="openAddLostModal()" style="display:none">+</button>
 
     <!-- SHELTER VIEW -->
     <div id="shelterView" class="hidden">
-      <h2 class="section-title">🏠 Barınak & Yuva Arıyor</h2>
+      <h2 class="section-title">ğŸ  BarÄ±nak & Yuva ArÄ±yor</h2>
       <div id="shelterList"><div class="loader"><div class="spinner"></div></div></div>
     </div>
     <button class="fab" id="shelterFab" onclick="openAddShelterModal()" style="display:none">+</button>
@@ -476,18 +476,18 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     <!-- PROFILE VIEW -->
     <div id="profileView" class="hidden">
       <div class="profile-header">
-        <div class="profile-avatar" id="profileAvatar">👤</div>
-        <div class="profile-name" id="profileName">—</div>
-        <div class="profile-city" id="profileCity">📍 —</div>
-        <div class="profile-email" id="profileEmail">—</div>
+        <div class="profile-avatar" id="profileAvatar">ğŸ‘¤</div>
+        <div class="profile-name" id="profileName">â€”</div>
+        <div class="profile-city" id="profileCity">ğŸ“ â€”</div>
+        <div class="profile-email" id="profileEmail">â€”</div>
       </div>
       <div class="section-card">
-        <h3>🐾 Hayvanlarım</h3>
+        <h3>ğŸ¾ HayvanlarÄ±m</h3>
         <div id="myPetsList"></div>
         <button class="btn secondary" onclick="openAddPetModal()" style="margin-top:12px">+ Hayvan Ekle</button>
       </div>
       <div class="section-card">
-        <button class="btn danger" onclick="doLogout()">Çıkış Yap</button>
+        <button class="btn danger" onclick="doLogout()">Ã‡Ä±kÄ±ÅŸ Yap</button>
       </div>
     </div>
   </div>
@@ -495,29 +495,29 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
   <!-- BOTTOM NAV (mobile) / SIDEBAR (desktop) -->
   <div class="bottom-nav">
     <div class="nav-brand hidden">
-      <div class="nav-brand-logo">🐾 PawMatch</div>
+      <div class="nav-brand-logo">ğŸ¾ PawMatch</div>
     </div>
     <div class="nav-item active" onclick="showView('homeView')" id="nav-home">
-      <div class="nav-icon">🏠</div>Keşfet
+      <div class="nav-icon">ğŸ </div>KeÅŸfet
     </div>
     <div class="nav-item" onclick="showView('matchesView')" id="nav-matches">
-      <div class="nav-icon">❤️</div>Eşleşme
+      <div class="nav-icon">â¤ï¸</div>EÅŸleÅŸme
     </div>
     <div class="nav-item" onclick="showView('mapView')" id="nav-map">
-      <div class="nav-icon">🗺️</div>Harita
+      <div class="nav-icon">ğŸ—ºï¸</div>Harita
     </div>
     <div class="nav-item" onclick="showView('lostView')" id="nav-lost">
-      <div class="nav-icon">😿</div>Kayıp
+      <div class="nav-icon">ğŸ˜¿</div>KayÄ±p
     </div>
     <div class="nav-item" onclick="showView('shelterView')" id="nav-shelter">
-      <div class="nav-icon">🏠</div>Barınak
+      <div class="nav-icon">ğŸ </div>BarÄ±nak
     </div>
     <div class="nav-item" onclick="showView('profileView')" id="nav-profile">
-      <div class="nav-icon">👤</div>Profil
+      <div class="nav-icon">ğŸ‘¤</div>Profil
     </div>
     <div class="nav-bottom hidden">
       <div class="nav-notif" onclick="toggleNotifs()">
-        <span style="font-size:22px">🔔</span> Bildirimler
+        <span style="font-size:22px">ğŸ””</span> Bildirimler
         <span class="notif-badge hidden" id="notifBadge2" style="position:static;margin-left:auto">0</span>
       </div>
     </div>
@@ -529,33 +529,33 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 <div class="modal-overlay hidden" id="addPetModal">
   <div class="modal">
     <div class="modal-header">
-      <h2 class="modal-title">🐾 Hayvan Ekle</h2>
-      <button class="modal-close" onclick="closeModal('addPetModal')">✕</button>
+      <h2 class="modal-title">ğŸ¾ Hayvan Ekle</h2>
+      <button class="modal-close" onclick="closeModal('addPetModal')">âœ•</button>
     </div>
-    <div class="form-group"><label>Hayvan Adı</label><input type="text" id="petName" placeholder="Pamuq, Boncuk..."></div>
-    <div class="form-group"><label>Tür</label>
+    <div class="form-group"><label>Hayvan AdÄ±</label><input type="text" id="petName" placeholder="Pamuq, Boncuk..."></div>
+    <div class="form-group"><label>TÃ¼r</label>
       <select id="petSpecies">
-        <option value="kedi">🐱 Kedi</option>
-        <option value="köpek">🐶 Köpek</option>
-        <option value="kuş">🐦 Kuş</option>
-        <option value="tavşan">🐰 Tavşan</option>
-        <option value="hamster">🐹 Hamster</option>
-        <option value="balık">🐟 Balık</option>
-        <option value="diğer">🐾 Diğer</option>
+        <option value="kedi">ğŸ± Kedi</option>
+        <option value="kÃ¶pek">ğŸ¶ KÃ¶pek</option>
+        <option value="kuÅŸ">ğŸ¦ KuÅŸ</option>
+        <option value="tavÅŸan">ğŸ° TavÅŸan</option>
+        <option value="hamster">ğŸ¹ Hamster</option>
+        <option value="balÄ±k">ğŸŸ BalÄ±k</option>
+        <option value="diÄŸer">ğŸ¾ DiÄŸer</option>
       </select>
     </div>
     <div class="form-group"><label>Cins</label><input type="text" id="petBreed" placeholder="Tekir, Golden, ..."></div>
-    <div class="form-group"><label>Yaş</label><input type="number" id="petAge" placeholder="2" min="0" max="30"></div>
-    <div class="form-group"><label>Hakkında</label><textarea id="petBio" placeholder="Hayvanınız hakkında kısa bir şeyler yazın..."></textarea></div>
-    <div class="form-group"><label>Fotoğraf</label>
+    <div class="form-group"><label>YaÅŸ</label><input type="number" id="petAge" placeholder="2" min="0" max="30"></div>
+    <div class="form-group"><label>HakkÄ±nda</label><textarea id="petBio" placeholder="HayvanÄ±nÄ±z hakkÄ±nda kÄ±sa bir ÅŸeyler yazÄ±n..."></textarea></div>
+    <div class="form-group"><label>FotoÄŸraf</label>
       <div class="img-upload" onclick="document.getElementById('petPhoto').click()">
-        <div>📷 Fotoğraf Seç</div>
+        <div>ğŸ“· FotoÄŸraf SeÃ§</div>
         <input type="file" id="petPhoto" accept="image/*" onchange="previewImg(this,'petPhotoPreview')">
         <img id="petPhotoPreview" class="img-preview hidden">
       </div>
     </div>
     <div id="addPetError" class="error-msg hidden"></div>
-    <button class="btn" onclick="addPet()">Hayvanı Ekle 🐾</button>
+    <button class="btn" onclick="addPet()">HayvanÄ± Ekle ğŸ¾</button>
   </div>
 </div>
 
@@ -563,34 +563,34 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 <div class="modal-overlay hidden" id="addLostModal">
   <div class="modal">
     <div class="modal-header">
-      <h2 class="modal-title">😿 İlan Ver</h2>
-      <button class="modal-close" onclick="closeModal('addLostModal')">✕</button>
+      <h2 class="modal-title">ğŸ˜¿ Ä°lan Ver</h2>
+      <button class="modal-close" onclick="closeModal('addLostModal')">âœ•</button>
     </div>
     <div class="form-group"><label>Durum</label>
       <select id="lostType">
-        <option value="lost">Kayıp</option>
+        <option value="lost">KayÄ±p</option>
         <option value="found">Bulundu</option>
       </select>
     </div>
-    <div class="form-group"><label>Hayvan Adı / Tanım</label><input type="text" id="lostName" placeholder="Tekir, Sarı köpek..."></div>
-    <div class="form-group"><label>Tür</label>
+    <div class="form-group"><label>Hayvan AdÄ± / TanÄ±m</label><input type="text" id="lostName" placeholder="Tekir, SarÄ± kÃ¶pek..."></div>
+    <div class="form-group"><label>TÃ¼r</label>
       <select id="lostSpecies">
-        <option value="kedi">🐱 Kedi</option><option value="köpek">🐶 Köpek</option>
-        <option value="kuş">🐦 Kuş</option><option value="diğer">🐾 Diğer</option>
+        <option value="kedi">ğŸ± Kedi</option><option value="kÃ¶pek">ğŸ¶ KÃ¶pek</option>
+        <option value="kuÅŸ">ğŸ¦ KuÅŸ</option><option value="diÄŸer">ğŸ¾ DiÄŸer</option>
       </select>
     </div>
-    <div class="form-group"><label>Açıklama</label><textarea id="lostDesc" placeholder="Nerede, ne zaman, özellikler..."></textarea></div>
-    <div class="form-group"><label>İletişim (Tel/Instagram)</label><input type="text" id="lostContact" placeholder="05xx xxx xx xx"></div>
-    <div class="form-group"><label>Şehir</label><input type="text" id="lostCity" placeholder="İstanbul, Ankara..."></div>
-    <div class="form-group"><label>Fotoğraf</label>
+    <div class="form-group"><label>AÃ§Ä±klama</label><textarea id="lostDesc" placeholder="Nerede, ne zaman, Ã¶zellikler..."></textarea></div>
+    <div class="form-group"><label>Ä°letiÅŸim (Tel/Instagram)</label><input type="text" id="lostContact" placeholder="05xx xxx xx xx"></div>
+    <div class="form-group"><label>Åehir</label><input type="text" id="lostCity" placeholder="Ä°stanbul, Ankara..."></div>
+    <div class="form-group"><label>FotoÄŸraf</label>
       <div class="img-upload" onclick="document.getElementById('lostPhoto').click()">
-        <div>📷 Fotoğraf Seç</div>
+        <div>ğŸ“· FotoÄŸraf SeÃ§</div>
         <input type="file" id="lostPhoto" accept="image/*" onchange="previewImg(this,'lostPhotoPreview')">
         <img id="lostPhotoPreview" class="img-preview hidden">
       </div>
     </div>
     <div id="addLostError" class="error-msg hidden"></div>
-    <button class="btn" onclick="addLostPet()">İlan Ver</button>
+    <button class="btn" onclick="addLostPet()">Ä°lan Ver</button>
   </div>
 </div>
 
@@ -598,35 +598,35 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 <div class="modal-overlay hidden" id="addShelterModal">
   <div class="modal">
     <div class="modal-header">
-      <h2 class="modal-title">🏠 İlan Ver</h2>
-      <button class="modal-close" onclick="closeModal('addShelterModal')">✕</button>
+      <h2 class="modal-title">ğŸ  Ä°lan Ver</h2>
+      <button class="modal-close" onclick="closeModal('addShelterModal')">âœ•</button>
     </div>
-    <div class="form-group"><label>Tür</label>
+    <div class="form-group"><label>TÃ¼r</label>
       <select id="shelterType">
-        <option value="barınak">Barınak</option>
-        <option value="yuva">Yuva Arıyor (Sahiplendirme)</option>
-        <option value="geçici">Geçici Bakım</option>
+        <option value="barÄ±nak">BarÄ±nak</option>
+        <option value="yuva">Yuva ArÄ±yor (Sahiplendirme)</option>
+        <option value="geÃ§ici">GeÃ§ici BakÄ±m</option>
       </select>
     </div>
-    <div class="form-group"><label>Başlık</label><input type="text" id="shelterName" placeholder="Minik'e Sıcak Yuva Arıyoruz..."></div>
-    <div class="form-group"><label>Açıklama</label><textarea id="shelterDesc" placeholder="Hayvan hakkında bilgiler, gereksinimler..."></textarea></div>
-    <div class="form-group"><label>İletişim</label><input type="text" id="shelterContact" placeholder="05xx xxx xx xx"></div>
-    <div class="form-group"><label>Şehir</label><input type="text" id="shelterCity" placeholder="İstanbul"></div>
-    <div class="form-group"><label>Fotoğraf</label>
+    <div class="form-group"><label>BaÅŸlÄ±k</label><input type="text" id="shelterName" placeholder="Minik'e SÄ±cak Yuva ArÄ±yoruz..."></div>
+    <div class="form-group"><label>AÃ§Ä±klama</label><textarea id="shelterDesc" placeholder="Hayvan hakkÄ±nda bilgiler, gereksinimler..."></textarea></div>
+    <div class="form-group"><label>Ä°letiÅŸim</label><input type="text" id="shelterContact" placeholder="05xx xxx xx xx"></div>
+    <div class="form-group"><label>Åehir</label><input type="text" id="shelterCity" placeholder="Ä°stanbul"></div>
+    <div class="form-group"><label>FotoÄŸraf</label>
       <div class="img-upload" onclick="document.getElementById('shelterPhoto').click()">
-        <div>📷 Fotoğraf Seç</div>
+        <div>ğŸ“· FotoÄŸraf SeÃ§</div>
         <input type="file" id="shelterPhoto" accept="image/*" onchange="previewImg(this,'shelterPhotoPreview')">
         <img id="shelterPhotoPreview" class="img-preview hidden">
       </div>
     </div>
     <div id="addShelterError" class="error-msg hidden"></div>
-    <button class="btn secondary" onclick="addShelterPost()">İlan Ver 🏠</button>
+    <button class="btn secondary" onclick="addShelterPost()">Ä°lan Ver ğŸ </button>
   </div>
 </div>
 
 <script>
 // ============================================================
-// 🔥 FIREBASE CONFIG — KENDİ BİLGİLERİNİ BURAYA YAZ!
+// ğŸ”¥ FIREBASE CONFIG â€” KENDÄ° BÄ°LGÄ°LERÄ°NÄ° BURAYA YAZ!
 // ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBKD2mXoR1CtnNFQgQS_hdMEKji6tv3jsE",
@@ -656,7 +656,7 @@ let mapInstance = null;
 let notifListener = null;
 
 // Species emojis
-const speciesEmoji = { kedi:'🐱', köpek:'🐶', kuş:'🐦', tavşan:'🐰', hamster:'🐹', balık:'🐟', diğer:'🐾' };
+const speciesEmoji = { kedi:'ğŸ±', kÃ¶pek:'ğŸ¶', kuÅŸ:'ğŸ¦', tavÅŸan:'ğŸ°', hamster:'ğŸ¹', balÄ±k:'ğŸŸ', diÄŸer:'ğŸ¾' };
 
 // ===== AUTH =====
 auth.onAuthStateChanged(async (user) => {
@@ -685,7 +685,7 @@ async function loadUserData() {
   if (snap.exists) {
     currentUserData = snap.data();
   } else {
-    currentUserData = { displayName: currentUser.displayName || 'Kullanıcı', city: '', email: currentUser.email };
+    currentUserData = { displayName: currentUser.displayName || 'KullanÄ±cÄ±', city: '', email: currentUser.email };
   }
 }
 
@@ -717,15 +717,15 @@ async function loadHomeStats() {
   if (!hml) return;
   try {
     const snap = await db.collection('matches').where('status','==','accepted').orderBy('createdAt','desc').limit(8).get();
-    if (snap.empty) { hml.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600">Henüz eşleşme yok.</div>'; return; }
+    if (snap.empty) { hml.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600">HenÃ¼z eÅŸleÅŸme yok.</div>'; return; }
     hml.innerHTML = '';
     snap.docs.forEach(doc => {
       const m = doc.data();
-      const p1img = m.pet1Photo ? `<img src="${m.pet1Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
-      const p2img = m.pet2Photo ? `<img src="${m.pet2Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+      const p1img = m.pet1Photo ? `<img src="${m.pet1Photo}" style="width:100%;height:100%;object-fit:cover">` : 'ğŸ¾';
+      const p2img = m.pet2Photo ? `<img src="${m.pet2Photo}" style="width:100%;height:100%;object-fit:cover">` : 'ğŸ¾';
       hml.innerHTML += `<div class="match-card" style="cursor:default">
         <div class="match-avatar" style="width:44px;height:44px">${p1img}</div>
-        <div class="match-info"><div class="match-name">${m.pet1Name} × ${m.pet2Name}</div><div class="match-preview">✅ Eşleşti!</div></div>
+        <div class="match-info"><div class="match-name">${m.pet1Name} Ã— ${m.pet2Name}</div><div class="match-preview">âœ… EÅŸleÅŸti!</div></div>
         <div class="match-avatar" style="width:44px;height:44px">${p2img}</div>
       </div>`;
     });
@@ -740,7 +740,7 @@ async function doLogin() {
   try {
     await auth.signInWithEmailAndPassword(email, pass);
   } catch(e) {
-    err.textContent = 'E-posta veya şifre hatalı!';
+    err.textContent = 'E-posta veya ÅŸifre hatalÄ±!';
     err.classList.remove('hidden');
   }
 }
@@ -753,10 +753,10 @@ async function doRegister() {
   const err = document.getElementById('registerError');
   err.classList.add('hidden');
   if (!name || !email || !pass || !city) {
-    err.textContent = 'Tüm alanları doldur!'; err.classList.remove('hidden'); return;
+    err.textContent = 'TÃ¼m alanlarÄ± doldur!'; err.classList.remove('hidden'); return;
   }
   if (pass.length < 6) {
-    err.textContent = 'Şifre en az 6 karakter olmalı!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Åifre en az 6 karakter olmalÄ±!'; err.classList.remove('hidden'); return;
   }
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
@@ -765,7 +765,7 @@ async function doRegister() {
       displayName: name, email, city, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
   } catch(e) {
-    err.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kullanılıyor!' : 'Kayıt sırasında hata oluştu!';
+    err.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kullanÄ±lÄ±yor!' : 'KayÄ±t sÄ±rasÄ±nda hata oluÅŸtu!';
     err.classList.remove('hidden');
   }
 }
@@ -774,22 +774,28 @@ async function doGoogleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider();
   const err = document.getElementById('loginError');
   try {
-    const result = await auth.signInWithPopup(provider);
+    await auth.signInWithRedirect(provider);
+  } catch(e) {
+    if (err) { err.textContent = 'Google ile giriÅŸ baÅŸarÄ±sÄ±z. LÃ¼tfen tekrar dene.'; err.classList.remove('hidden'); }
+  }
+}
+
+// Handle redirect result on page load
+auth.getRedirectResult().then(async (result) => {
+  if (result && result.user) {
     const user = result.user;
     const snap = await db.collection('users').doc(user.uid).get();
     if (!snap.exists) {
       await db.collection('users').doc(user.uid).set({
-        displayName: user.displayName || 'Kullanıcı',
+        displayName: user.displayName || 'KullanÄ±cÄ±',
         email: user.email,
         city: '',
         photoURL: user.photoURL || null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
-  } catch(e) {
-    if (err) { err.textContent = 'Google ile giriş başarısız. Popup engellenmiş olabilir.'; err.classList.remove('hidden'); }
   }
-}
+}).catch(e => console.error('Redirect error:', e));
 
 function doLogout() { auth.signOut(); }
 
@@ -855,11 +861,11 @@ async function loadPetsForSwipe() {
 function renderSwipeCard() {
   const area = document.getElementById('swipeArea');
   if (swipeIndex >= swipePets.length) {
-    area.innerHTML = `<div class="empty-state"><div class="big-emoji">🐾</div><h3>Hepsi bu kadar!</h3><p style="color:var(--muted);font-weight:600">Şimdilik yeni hayvan yok.<br>Daha sonra tekrar dene!</p><br><button class="btn sm" onclick="loadPetsForSwipe()" style="margin:0 auto;display:block;width:auto">Yenile 🔄</button></div>`;
+    area.innerHTML = `<div class="empty-state"><div class="big-emoji">ğŸ¾</div><h3>Hepsi bu kadar!</h3><p style="color:var(--muted);font-weight:600">Åimdilik yeni hayvan yok.<br>Daha sonra tekrar dene!</p><br><button class="btn sm" onclick="loadPetsForSwipe()" style="margin:0 auto;display:block;width:auto">Yenile ğŸ”„</button></div>`;
     return;
   }
   const pet = swipePets[swipeIndex];
-  const emoji = speciesEmoji[pet.species] || '🐾';
+  const emoji = speciesEmoji[pet.species] || 'ğŸ¾';
   const imgHtml = pet.photoURL
     ? `<img src="${pet.photoURL}" style="width:100%;height:100%;object-fit:cover">`
     : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fde8e0,#ffd5c2);display:flex;align-items:center;justify-content:center;font-size:90px">${emoji}</div>`;
@@ -869,8 +875,8 @@ function renderSwipeCard() {
       <div class="pet-card-img">${imgHtml}</div>
       <div class="pet-card-info">
         <div class="pet-card-name">${pet.name} <span style="font-size:18px">${emoji}</span></div>
-        <div class="pet-card-details">${pet.breed || ''} • ${pet.age ? pet.age + ' yaşında' : ''}</div>
-        <div class="pet-card-city">📍 ${pet.city || ''}</div>
+        <div class="pet-card-details">${pet.breed || ''} â€¢ ${pet.age ? pet.age + ' yaÅŸÄ±nda' : ''}</div>
+        <div class="pet-card-city">ğŸ“ ${pet.city || ''}</div>
         <div class="pet-card-bio">${pet.bio || ''}</div>
       </div>
     </div>`;
@@ -879,7 +885,7 @@ function renderSwipeCard() {
   const rem = swipePets.length - swipeIndex;
   if (rem > 1) {
     const next = swipePets[swipeIndex+1];
-    const ne = speciesEmoji[next?.species] || '🐾';
+    const ne = speciesEmoji[next?.species] || 'ğŸ¾';
     area.innerHTML += `<div style="position:absolute;top:8px;right:12px;background:rgba(255,255,255,0.9);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--muted)">${rem} hayvan</div>`;
   }
 }
@@ -912,7 +918,7 @@ async function swipeLike(isSuper) {
       isSuper: isSuper || false,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    // Check mutual like → create match request
+    // Check mutual like â†’ create match request
     const mutualSnap = await db.collection('likes')
       .where('fromPetId','==', pet.id)
       .where('toPetId','==', myPetId).get();
@@ -987,24 +993,24 @@ async function loadMatches(tab) {
       .orderBy('createdAt','desc').get();
     
     if (snap.empty) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">💌</div><h3>Henüz istek yok</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">ğŸ’Œ</div><h3>HenÃ¼z istek yok</h3></div>';
       return;
     }
     cont.innerHTML = '';
     snap.docs.forEach(doc => {
       const m = doc.data();
-      const emoji = '🐾';
+      const emoji = 'ğŸ¾';
       const imgHtml = m.pet1Photo ? `<img src="${m.pet1Photo}">` : emoji;
       cont.innerHTML += `
         <div class="match-card">
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${m.pet1Name}</div>
-            <div class="match-preview">Eşleşme isteği gönderdi!</div>
+            <div class="match-preview">EÅŸleÅŸme isteÄŸi gÃ¶nderdi!</div>
           </div>
           <div class="match-actions">
-            <button class="accept-btn" onclick="respondMatch('${doc.id}','accepted','${m.user1Id}')">✓ Kabul</button>
-            <button class="reject-btn" onclick="respondMatch('${doc.id}','rejected','')">✕</button>
+            <button class="accept-btn" onclick="respondMatch('${doc.id}','accepted','${m.user1Id}')">âœ“ Kabul</button>
+            <button class="reject-btn" onclick="respondMatch('${doc.id}','rejected','')">âœ•</button>
           </div>
         </div>`;
     });
@@ -1015,7 +1021,7 @@ async function loadMatches(tab) {
     const all = [...snap1.docs, ...snap2.docs];
     
     if (all.length === 0) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">🐾</div><h3>Henüz eşleşme yok</h3><p style="color:var(--muted);font-weight:600">Hayvanları beğen, eşleşince<br>sohbet başlayabilirsin!</p></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">ğŸ¾</div><h3>HenÃ¼z eÅŸleÅŸme yok</h3><p style="color:var(--muted);font-weight:600">HayvanlarÄ± beÄŸen, eÅŸleÅŸince<br>sohbet baÅŸlayabilirsin!</p></div>';
       return;
     }
     cont.innerHTML = '';
@@ -1024,28 +1030,28 @@ async function loadMatches(tab) {
       const isUser1 = m.user1Id === currentUser.uid;
       const otherName = isUser1 ? m.pet2Name : m.pet1Name;
       const otherPhoto = isUser1 ? m.pet2Photo : m.pet1Photo;
-      const imgHtml = otherPhoto ? `<img src="${otherPhoto}">` : '🐾';
+      const imgHtml = otherPhoto ? `<img src="${otherPhoto}">` : 'ğŸ¾';
       cont.innerHTML += `
         <div class="match-card" onclick="openChat('${doc.id}','${otherName}','${otherPhoto||''}')">
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${otherName}</div>
-            <div class="match-preview">Sohbet başlatabilirsin!</div>
+            <div class="match-preview">Sohbet baÅŸlatabilirsin!</div>
           </div>
-          <div style="font-size:22px">💬</div>
+          <div style="font-size:22px">ğŸ’¬</div>
         </div>`;
     });
   } else if (tab === 'likes') {
-    // Beğenilerim (likes I sent)
+    // BeÄŸenilerim (likes I sent)
     const myPetsSnap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
     const myPetIds = myPetsSnap.docs.map(d => d.id);
     if (myPetIds.length === 0) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>Önce hayvan ekle</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">â¤ï¸</div><h3>Ã–nce hayvan ekle</h3></div>';
       return;
     }
     const snap = await db.collection('likes').where('fromPetId','in',myPetIds.slice(0,10)).get();
     if (snap.empty) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>Henüz beğeni yok</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">â¤ï¸</div><h3>HenÃ¼z beÄŸeni yok</h3></div>';
       return;
     }
     cont.innerHTML = '';
@@ -1054,14 +1060,14 @@ async function loadMatches(tab) {
       const petSnap = await db.collection('pets').doc(l.toPetId).get();
       if (!petSnap.exists) continue;
       const pet = petSnap.data();
-      const emoji = speciesEmoji[pet.species] || '🐾';
+      const emoji = speciesEmoji[pet.species] || 'ğŸ¾';
       const imgHtml = pet.photoURL ? `<img src="${pet.photoURL}">` : emoji;
       cont.innerHTML += `
         <div class="match-card">
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${pet.name} ${emoji}</div>
-            <div class="match-preview">📍 ${pet.city || ''} • ${l.isSuper ? '⭐ Süper beğeni' : '❤️ Beğenildi'}</div>
+            <div class="match-preview">ğŸ“ ${pet.city || ''} â€¢ ${l.isSuper ? 'â­ SÃ¼per beÄŸeni' : 'â¤ï¸ BeÄŸenildi'}</div>
           </div>
         </div>`;
     }
@@ -1088,7 +1094,7 @@ function openChat(matchId, petName, petPhoto) {
   currentChatId = matchId;
   document.getElementById('chatName').textContent = petName;
   const avatarEl = document.getElementById('chatAvatar');
-  avatarEl.innerHTML = petPhoto ? `<img src="${petPhoto}">` : '🐾';
+  avatarEl.innerHTML = petPhoto ? `<img src="${petPhoto}">` : 'ğŸ¾';
   showView('chatView');
   loadChatMessages(matchId);
 }
@@ -1135,7 +1141,7 @@ async function loadMap() {
   if (!mapInstance) {
     mapInstance = L.map('map').setView([39.9334, 32.8597], 6);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap'
+      attribution: 'Â© OpenStreetMap'
     }).addTo(mapInstance);
   } else {
     mapInstance.eachLayer(l => { if (l instanceof L.Marker) mapInstance.removeLayer(l); });
@@ -1148,7 +1154,7 @@ async function loadMap() {
     if (p.location && p.location.lat) {
       L.circleMarker([p.location.lat, p.location.lng], {
         radius: 10, fillColor: '#FF6B4A', color: '#fff', weight: 2, fillOpacity: 0.9
-      }).addTo(mapInstance).bindPopup(`<b>${p.name}</b><br>${speciesEmoji[p.species]||'🐾'} ${p.species}<br>📍 ${p.city||''}`);
+      }).addTo(mapInstance).bindPopup(`<b>${p.name}</b><br>${speciesEmoji[p.species]||'ğŸ¾'} ${p.species}<br>ğŸ“ ${p.city||''}`);
     }
   });
   
@@ -1159,7 +1165,7 @@ async function loadMap() {
     if (p.location && p.location.lat) {
       L.circleMarker([p.location.lat, p.location.lng], {
         radius: 10, fillColor: '#e74c3c', color: '#fff', weight: 2, fillOpacity: 0.9
-      }).addTo(mapInstance).bindPopup(`<b>${p.status==='lost'?'😿 Kayıp':'✅ Bulundu'}</b><br>${p.petName}<br>📍 ${p.city||''}`);
+      }).addTo(mapInstance).bindPopup(`<b>${p.status==='lost'?'ğŸ˜¿ KayÄ±p':'âœ… Bulundu'}</b><br>${p.petName}<br>ğŸ“ ${p.city||''}`);
     }
   });
 }
@@ -1170,24 +1176,24 @@ async function loadLostPets() {
   list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
   const snap = await db.collection('lostPets').orderBy('createdAt','desc').limit(20).get();
   if (snap.empty) {
-    list.innerHTML = '<div class="empty-state"><div class="big-emoji">😿</div><h3>Henüz ilan yok</h3><p style="color:var(--muted);font-weight:600">Kayıp ilanı vermek için + butonuna tıkla</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="big-emoji">ğŸ˜¿</div><h3>HenÃ¼z ilan yok</h3><p style="color:var(--muted);font-weight:600">KayÄ±p ilanÄ± vermek iÃ§in + butonuna tÄ±kla</p></div>';
     return;
   }
   list.innerHTML = '';
   snap.docs.forEach(doc => {
     const p = doc.data();
-    const emoji = speciesEmoji[p.species] || '🐾';
+    const emoji = speciesEmoji[p.species] || 'ğŸ¾';
     const imgHtml = p.photoURL ? `<img src="${p.photoURL}" style="width:100%;height:100%;object-fit:cover">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px">${emoji}</div>`;
     list.innerHTML += `
       <div class="lost-card">
         <div class="lost-card-img" style="height:200px;overflow:hidden">${imgHtml}</div>
         <div class="lost-card-body">
-          <span class="lost-badge ${p.status}">${p.status==='lost'?'😿 Kayıp':'✅ Bulundu'}</span>
+          <span class="lost-badge ${p.status}">${p.status==='lost'?'ğŸ˜¿ KayÄ±p':'âœ… Bulundu'}</span>
           <div class="lost-card-name">${p.petName} ${emoji}</div>
           <div class="lost-card-desc">${p.description || ''}</div>
           <div class="lost-card-footer">
-            <div style="font-size:13px;color:var(--muted);font-weight:600">📍 ${p.city||''}</div>
-            <div class="lost-contact">📞 ${p.contact || ''}</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:600">ğŸ“ ${p.city||''}</div>
+            <div class="lost-contact">ğŸ“ ${p.contact || ''}</div>
           </div>
         </div>
       </div>`;
@@ -1204,7 +1210,7 @@ async function addLostPet() {
   const err = document.getElementById('addLostError');
   err.classList.add('hidden');
   if (!petName || !description || !contact) {
-    err.textContent = 'Ad, açıklama ve iletişim zorunlu!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Ad, aÃ§Ä±klama ve iletiÅŸim zorunlu!'; err.classList.remove('hidden'); return;
   }
   const file = document.getElementById('lostPhoto').files[0];
   let photoURL = null;
@@ -1224,13 +1230,13 @@ async function loadShelter() {
   list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
   const snap = await db.collection('shelters').orderBy('createdAt','desc').limit(20).get();
   if (snap.empty) {
-    list.innerHTML = '<div class="empty-state"><div class="big-emoji">🏠</div><h3>Henüz ilan yok</h3><p style="color:var(--muted);font-weight:600">İlan vermek için + butonuna tıkla</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="big-emoji">ğŸ </div><h3>HenÃ¼z ilan yok</h3><p style="color:var(--muted);font-weight:600">Ä°lan vermek iÃ§in + butonuna tÄ±kla</p></div>';
     return;
   }
   list.innerHTML = '';
   snap.docs.forEach(doc => {
     const s = doc.data();
-    const imgHtml = s.photoURL ? `<img src="${s.photoURL}" style="width:100%;height:100%;object-fit:cover">` : '🏠';
+    const imgHtml = s.photoURL ? `<img src="${s.photoURL}" style="width:100%;height:100%;object-fit:cover">` : 'ğŸ ';
     list.innerHTML += `
       <div class="shelter-card">
         <div class="shelter-card-img">${imgHtml}</div>
@@ -1238,7 +1244,7 @@ async function loadShelter() {
           <span class="shelter-badge">${s.type}</span>
           <div class="shelter-name">${s.name}</div>
           <div class="shelter-desc">${s.description || ''}</div>
-          <div class="shelter-city">📍 ${s.city || ''} • 📞 ${s.contact || ''}</div>
+          <div class="shelter-city">ğŸ“ ${s.city || ''} â€¢ ğŸ“ ${s.contact || ''}</div>
         </div>
       </div>`;
   });
@@ -1253,7 +1259,7 @@ async function addShelterPost() {
   const err = document.getElementById('addShelterError');
   err.classList.add('hidden');
   if (!name || !contact) {
-    err.textContent = 'Başlık ve iletişim zorunlu!'; err.classList.remove('hidden'); return;
+    err.textContent = 'BaÅŸlÄ±k ve iletiÅŸim zorunlu!'; err.classList.remove('hidden'); return;
   }
   const file = document.getElementById('shelterPhoto').files[0];
   let photoURL = null;
@@ -1270,13 +1276,13 @@ async function addShelterPost() {
 // ===== PROFILE =====
 async function loadProfile() {
   if (!currentUser || !currentUserData) return;
-  const name = currentUserData.displayName || currentUser.displayName || 'Kullanıcı';
+  const name = currentUserData.displayName || currentUser.displayName || 'KullanÄ±cÄ±';
   document.getElementById('profileName').textContent = name;
-  document.getElementById('profileCity').textContent = '📍 ' + (currentUserData.city || '');
+  document.getElementById('profileCity').textContent = 'ğŸ“ ' + (currentUserData.city || '');
   document.getElementById('profileEmail').textContent = currentUser.email;
   // Update desktop welcome
   const hw = document.getElementById('homeWelcome');
-  if (hw) hw.querySelector('h2').textContent = `Merhaba, ${name.split(' ')[0]}! 🐾`;
+  if (hw) hw.querySelector('h2').textContent = `Merhaba, ${name.split(' ')[0]}! ğŸ¾`;
   // Profile avatar from Google photo
   if (currentUser.photoURL) {
     document.getElementById('profileAvatar').innerHTML = `<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover">`;
@@ -1286,28 +1292,28 @@ async function loadProfile() {
   const snap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
   const list = document.getElementById('myPetsList');
   if (snap.empty) {
-    list.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600;padding:8px 0">Henüz hayvan eklemedin.</div>';
+    list.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600;padding:8px 0">HenÃ¼z hayvan eklemedin.</div>';
     return;
   }
   list.innerHTML = '';
   snap.docs.forEach(doc => {
     const p = doc.data();
-    const emoji = speciesEmoji[p.species] || '🐾';
+    const emoji = speciesEmoji[p.species] || 'ğŸ¾';
     const imgHtml = p.photoURL ? `<img src="${p.photoURL}">` : emoji;
     list.innerHTML += `
       <div class="pet-item">
         <div class="pet-item-img">${imgHtml}</div>
         <div class="pet-item-info">
           <div class="pet-item-name">${p.name} ${emoji}</div>
-          <div class="pet-item-detail">${p.breed||''} • ${p.age ? p.age+' yaşında' : ''} • ${p.city||''}</div>
+          <div class="pet-item-detail">${p.breed||''} â€¢ ${p.age ? p.age+' yaÅŸÄ±nda' : ''} â€¢ ${p.city||''}</div>
         </div>
-        <button style="background:none;border:none;font-size:20px;cursor:pointer;color:#e74c3c" onclick="deletePet('${doc.id}')">🗑️</button>
+        <button style="background:none;border:none;font-size:20px;cursor:pointer;color:#e74c3c" onclick="deletePet('${doc.id}')">ğŸ—‘ï¸</button>
       </div>`;
   });
 }
 
 async function deletePet(petId) {
-  if (!confirm('Bu hayvanı silmek istediğine emin misin?')) return;
+  if (!confirm('Bu hayvanÄ± silmek istediÄŸine emin misin?')) return;
   await db.collection('pets').doc(petId).delete();
   loadProfile();
 }
@@ -1321,7 +1327,7 @@ async function addPet() {
   const bio = document.getElementById('petBio').value.trim();
   const err = document.getElementById('addPetError');
   err.classList.add('hidden');
-  if (!name) { err.textContent = 'Hayvanın adını gir!'; err.classList.remove('hidden'); return; }
+  if (!name) { err.textContent = 'HayvanÄ±n adÄ±nÄ± gir!'; err.classList.remove('hidden'); return; }
   
   const file = document.getElementById('petPhoto').files[0];
   let photoURL = null;
@@ -1355,13 +1361,13 @@ function loadNotifications() {
       if (badge2) { badge2.textContent = count; badge2.classList.toggle('hidden', count === 0); }
       
       const panel = document.getElementById('notifPanel');
-      panel.innerHTML = count === 0 ? '<div style="text-align:center;padding:16px;color:var(--muted);font-weight:600">Bildirim yok 🎉</div>' : '';
+      panel.innerHTML = count === 0 ? '<div style="text-align:center;padding:16px;color:var(--muted);font-weight:600">Bildirim yok ğŸ‰</div>' : '';
       snap.docs.forEach(doc => {
         const n = doc.data();
         let text = '';
-        if (n.type === 'match_request') text = `🐾 ${n.fromPetName} eşleşme isteği gönderdi!`;
-        if (n.type === 'match_accepted') text = `🎉 Eşleşmen kabul edildi!`;
-        panel.innerHTML += `<div class="notif-item"><div class="notif-icon">${n.type==='match_request'?'🐾':'🎉'}</div><div>${text}</div><button style="background:none;border:none;cursor:pointer;color:var(--primary);font-weight:700;font-size:12px" onclick="markRead('${doc.id}')">Gördüm</button></div>`;
+        if (n.type === 'match_request') text = `ğŸ¾ ${n.fromPetName} eÅŸleÅŸme isteÄŸi gÃ¶nderdi!`;
+        if (n.type === 'match_accepted') text = `ğŸ‰ EÅŸleÅŸmen kabul edildi!`;
+        panel.innerHTML += `<div class="notif-item"><div class="notif-icon">${n.type==='match_request'?'ğŸ¾':'ğŸ‰'}</div><div>${text}</div><button style="background:none;border:none;cursor:pointer;color:var(--primary);font-weight:700;font-size:12px" onclick="markRead('${doc.id}')">GÃ¶rdÃ¼m</button></div>`;
       });
     });
 }
