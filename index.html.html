@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PawMatch 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --primary: #F4622A;
+  --primary-light: #FF8255;
+  --primary-dim: rgba(244,98,42,0.1);
+  --secondary: #FFAB40;
+  --green: #1A9E6E;
+  --green-light: #E6F7F1;
+  --red: #E53E3E;
+  --bg: #F7F4F0;
+  --bg2: #EDE9E3;
+  --card: #FFFFFF;
+  --text: #1A1A1A;
+  --text2: #555;
+  --muted: #999;
+  --border: #E8E2DA;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --sidebar: 230px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.hidden { display: none !important; }
+
+/* ──────────────────────────────────────
+   AUTH
+────────────────────────────────────── */
+#authView {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+#authView::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(244,98,42,0.25) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,171,64,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.auth-wrap {
+  display: flex;
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+}
+.auth-brand {
+  flex: 1;
+  color: white;
+}
+.auth-logo-mark {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(244,98,42,0.4);
+}
+.auth-brand h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.auth-brand p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 320px;
+}
+.auth-features {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-feat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+.auth-feat span:first-child {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.auth-card {
+  background: white;
+  border-radius: 24px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+}
+.auth-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.auth-card-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.tab-btns {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+.tab-btn {
+  flex: 1; padding: 9px;
+  border: none; background: transparent;
+  border-radius: 7px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600; font-size: 14px;
+  cursor: pointer; color: var(--muted);
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.form-group { margin-bottom: 14px; }
+.form-group label {
+  display: block; font-weight: 600;
+  font-size: 12px; color: var(--text2);
+  margin-bottom: 6px; text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px; color: var(--text);
+  background: var(--bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-dim);
+  background: white;
+}
+.form-group textarea { resize: none; height: 80px; }
+
+.btn {
+  display: block; width: 100%;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 4px 14px rgba(244,98,42,0.3);
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244,98,42,0.4); }
+.btn:active { transform: translateY(0); }
+.btn.secondary {
+  background: linear-gradient(135deg, var(--green), #22c58b);
+  box-shadow: 0 4px 14px rgba(26,158,110,0.25);
+}
+.btn.secondary:hover { box-shadow: 0 6px 20px rgba(26,158,110,0.35); }
+.btn.outline {
+  background: transparent; color: var(--primary);
+  border: 1.5px solid var(--primary); box-shadow: none;
+}
+.btn.outline:hover { background: var(--primary-dim); }
+.btn.danger {
+  background: linear-gradient(135deg, #E53E3E, #C53030);
+  box-shadow: 0 4px 14px rgba(229,62,62,0.25);
+}
+.btn.sm { padding: 8px 16px; font-size: 13px; width: auto; display: inline-block; }
+.btn.ghost {
+  background: var(--bg); color: var(--text2);
+  box-shadow: var(--shadow-sm);
+}
+.btn.ghost:hover { background: var(--bg2); }
+
+.error-msg {
+  color: var(--red); font-size: 13px; font-weight: 600;
+  margin-top: 8px; background: #FFF5F5;
+  padding: 10px 12px; border-radius: 8px;
+  border-left: 3px solid var(--red);
+}
+
+@media (max-width: 640px) {
+  .auth-brand { display: none; }
+  .auth-card { max-width: 100%; }
+}
+
+/* ──────────────────────────────────────
+   MAIN APP LAYOUT
+────────────────────────────────────── */
+#mainApp {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── MOBILE TOPBAR ── */
+.topbar {
+  display: none;
+  background: white;
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 800;
+  color: var(--primary);
+  display: flex; align-items: center; gap: 8px;
+}
+.notif-btn {
+  position: relative;
+  background: var(--bg); border: none;
+  width: 38px; height: 38px;
+  border-radius: 10px; cursor: pointer;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.notif-badge {
+  position: absolute; top: 3px; right: 3px;
+  background: var(--primary); color: white;
+  font-size: 9px; font-weight: 800;
+  width: 15px; height: 15px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar);
+  height: 100%;
+  background: white;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-brand {
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-brand-inner {
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-logo-mark {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.sidebar-brand-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 800;
+  color: var(--text);
+}
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 14px; font-weight: 600;
+  transition: all 0.15s;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+.nav-item .nav-icon { font-size: 18px; flex-shrink: 0; }
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active {
+  background: var(--primary-dim);
+  color: var(--primary);
+}
+.nav-item.active .nav-icon { transform: scale(1.1); }
+.sidebar-bottom {
+  padding: 12px 10px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-notif {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 14px; font-weight: 600;
+  transition: all 0.15s;
+}
+.sidebar-notif:hover { background: var(--bg); }
+
+/* ── CONTENT ── */
+.view-content {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  height: 60px;
+  align-items: stretch;
+}
+.bottom-nav .nav-item {
+  flex: 1;
+  flex-direction: column;
+  border-radius: 0;
+  padding: 8px 4px 6px;
+  font-size: 10px;
+  gap: 2px;
+  margin: 0;
+  justify-content: center;
+}
+.bottom-nav .nav-icon { font-size: 20px; }
+
+@media (max-width: 767px) {
+  .topbar { display: flex; }
+  .sidebar { display: none; }
+  .view-content { margin-top: 52px; margin-bottom: 60px; overflow-y: auto; }
+  .bottom-nav { display: flex; }
+}
+
+/* ──────────────────────────────────────
+   VIEW BASE
+────────────────────────────────────── */
+.view {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+.view.active { display: flex; }
+
+.view-header {
+  flex-shrink: 0;
+  padding: 20px 24px 0;
+}
+.view-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.view-sub { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+.view-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px 24px;
+  min-height: 0;
+}
+
+/* Custom scrollbar */
+.view-body::-webkit-scrollbar,
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.view-body::-webkit-scrollbar-track,
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.view-body::-webkit-scrollbar-thumb,
+.sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ──────────────────────────────────────
+   HOME / SWIPE VIEW
+────────────────────────────────────── */
+#homeView {
+  flex-direction: row;
+}
+
+/* Left panel */
+.home-left {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  background: white;
+  padding: 20px;
+  gap: 14px;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex; gap: 6px;
+  overflow-x: auto; flex-shrink: 0;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600; font-size: 12px;
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.15s;
+  color: var(--text2);
+}
+.filter-chip.active {
+  background: var(--primary); border-color: var(--primary);
+  color: white;
+}
+.filter-chip:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+/* Swipe area */
+.swipe-area {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.pet-card {
+  position: absolute; inset: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  cursor: grab;
+  user-select: none;
+  background: white;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.pet-card:active { cursor: grabbing; }
+.pet-card-img {
+  width: 100%; height: 58%;
+  background: linear-gradient(135deg, #FDE8E0, #FFD5C2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 72px;
+  overflow: hidden;
+  position: relative;
+}
+.pet-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.pet-card-img-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+  background: linear-gradient(to top, rgba(0,0,0,0.25), transparent);
+}
+.pet-card-info { padding: 14px 18px; }
+.pet-card-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.pet-card-details {
+  font-size: 13px; color: var(--text2); font-weight: 500; margin-top: 3px;
+}
+.pet-card-city {
+  font-size: 12px; color: var(--primary); font-weight: 600;
+  margin-top: 4px;
+  display: flex; align-items: center; gap: 3px;
+}
+.pet-card-bio {
+  font-size: 12px; color: var(--text2);
+  margin-top: 8px; line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pet-card-count {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(0,0,0,0.4);
+  color: white; font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Swipe buttons */
+.swipe-btns {
+  flex-shrink: 0;
+  display: flex; justify-content: center;
+  gap: 16px; padding-top: 10px;
+}
+.swipe-btn {
+  width: 56px; height: 56px;
+  border-radius: 50%; border: none;
+  cursor: pointer; font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.swipe-btn.pass {
+  background: white; color: #E53E3E;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.swipe-btn.like {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; box-shadow: 0 4px 16px rgba(244,98,42,0.35);
+}
+.swipe-btn.super {
+  background: linear-gradient(135deg, #4F8EF7, #7CB9FF);
+  color: white; box-shadow: 0 4px 16px rgba(79,142,247,0.3);
+}
+.swipe-btn:hover { transform: scale(1.1); }
+.swipe-btn:active { transform: scale(0.95); }
+
+/* Right panel */
+.home-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 20px;
+}
+.home-right-header {
+  flex-shrink: 0;
+  margin-bottom: 14px;
+}
+.home-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; flex-shrink: 0; margin-bottom: 14px;
+}
+.stat-card {
+  background: white; border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--primary);
+}
+.stat-label { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+.home-recent-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text);
+}
+.home-recent-list { flex: 1; overflow-y: auto; min-height: 0; }
+
+/* Empty state */
+.empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 20px; text-align: center;
+  height: 100%;
+}
+.empty-state .big-emoji { font-size: 64px; margin-bottom: 12px; }
+.empty-state h3 { font-family: 'Syne', sans-serif; font-size: 18px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 16px; }
+
+/* Mobile home override */
+@media (max-width: 767px) {
+  #homeView { flex-direction: column; }
+  .home-left { flex: none; border-right: none; border-bottom: 1px solid var(--border); height: auto; max-height: 100%; }
+  .home-right { display: none; }
+  .swipe-area { height: 380px; flex: none; }
+}
+
+/* ──────────────────────────────────────
+   MATCHES VIEW
+────────────────────────────────────── */
+.tabs {
+  display: flex; gap: 4px;
+  background: var(--bg); border-radius: 10px;
+  padding: 4px; flex-shrink: 0; margin-bottom: 16px;
+}
+.tab {
+  flex: 1; padding: 9px;
+  text-align: center; border: none;
+  background: transparent; border-radius: 7px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600; font-size: 13px;
+  cursor: pointer; color: var(--muted);
+  transition: all 0.15s;
+}
+.tab.active {
+  background: white; color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.match-card {
+  background: white; border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.match-card:hover {
+  box-shadow: var(--shadow);
+  border-color: rgba(244,98,42,0.2);
+  transform: translateY(-1px);
+}
+.match-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FDE8E0, #FFD5C2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0; overflow: hidden;
+}
+.match-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.match-info { flex: 1; min-width: 0; }
+.match-name { font-weight: 700; font-size: 15px; }
+.match-preview { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.match-time { font-size: 11px; color: #ccc; font-weight: 500; }
+.match-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.accept-btn {
+  background: var(--green-light); color: var(--green);
+  border: none; border-radius: 8px;
+  padding: 7px 12px; font-family: 'Outfit', sans-serif;
+  font-weight: 700; font-size: 12px; cursor: pointer;
+  transition: background 0.15s;
+}
+.accept-btn:hover { background: #C9EEE1; }
+.reject-btn {
+  background: #FFF5F5; color: var(--red);
+  border: none; border-radius: 8px;
+  padding: 7px 12px; font-family: 'Outfit', sans-serif;
+  font-weight: 700; font-size: 12px; cursor: pointer;
+}
+
+/* ──────────────────────────────────────
+   CHAT VIEW
+────────────────────────────────────── */
+#chatView {
+  flex-direction: column;
+}
+.chat-header {
+  background: white;
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.chat-back {
+  background: var(--bg); border: none;
+  width: 36px; height: 36px; border-radius: 9px;
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2); transition: background 0.15s;
+}
+.chat-back:hover { background: var(--bg2); }
+.chat-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #FDE8E0, #FFD5C2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; overflow: hidden;
+}
+.chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.chat-name { font-weight: 700; font-size: 15px; }
+.chat-status { font-size: 12px; color: var(--green); font-weight: 500; }
+.chat-messages {
+  flex: 1; overflow-y: auto;
+  padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0;
+}
+.msg {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px; line-height: 1.5; font-weight: 500;
+}
+.msg.mine {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; align-self: flex-end; border-bottom-right-radius: 4px;
+}
+.msg.theirs {
+  background: white; color: var(--text);
+  align-self: flex-start; border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+.msg-time { font-size: 10px; opacity: 0.6; margin-top: 3px; }
+.chat-input-area {
+  background: white; padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: center;
+  flex-shrink: 0;
+}
+.chat-input {
+  flex: 1; padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 24px; font-family: 'Outfit', sans-serif;
+  font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+}
+.chat-input:focus { border-color: var(--primary); }
+.send-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; border: none; width: 42px; height: 42px;
+  border-radius: 50%; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(244,98,42,0.3);
+}
+
+/* ──────────────────────────────────────
+   MAP VIEW
+────────────────────────────────────── */
+#map {
+  flex: 1; width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 0;
+}
+.map-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 16px 24px 24px; gap: 12px; min-height: 0;
+}
+.map-legend {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--text2);
+}
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* ──────────────────────────────────────
+   CARDS (Lost / Shelter)
+────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.lost-card {
+  background: white; border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.lost-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.lost-card-img {
+  width: 100%; height: 180px;
+  background: linear-gradient(135deg, #FFF0E0, #FFE4CC);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px; overflow: hidden;
+}
+.lost-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.lost-card-body { padding: 14px; }
+.badge {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 20px; font-size: 11px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.badge.lost { background: #FFF5F5; color: var(--red); }
+.badge.found { background: var(--green-light); color: var(--green); }
+.badge.shelter { background: var(--primary-dim); color: var(--primary); }
+.badge.temp { background: #EEF2FF; color: #5A67D8; }
+.lost-card-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; }
+.lost-card-desc { font-size: 12px; color: var(--text2); margin-top: 5px; line-height: 1.5; }
+.lost-card-footer {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+.lost-contact { font-size: 12px; color: var(--primary); font-weight: 700; }
+
+.shelter-card {
+  background: white; border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.shelter-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.shelter-card-img {
+  width: 90px; min-height: 90px;
+  background: linear-gradient(135deg, var(--green-light), #C3F0D8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; flex-shrink: 0; overflow: hidden;
+}
+.shelter-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.shelter-card-body { padding: 14px; flex: 1; }
+.shelter-name { font-weight: 700; font-size: 14px; }
+.shelter-desc { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+.shelter-city { font-size: 12px; color: var(--primary); font-weight: 600; margin-top: 6px; }
+
+/* ──────────────────────────────────────
+   PROFILE VIEW
+────────────────────────────────────── */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 16px;
+  height: 100%;
+  overflow: hidden;
+}
+.profile-left {
+  display: flex; flex-direction: column; gap: 14px;
+  overflow-y: auto; min-height: 0;
+}
+.profile-right {
+  overflow-y: auto; min-height: 0;
+}
+@media (max-width: 900px) {
+  .profile-layout { grid-template-columns: 1fr; }
+}
+
+.profile-hero {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--radius-lg); padding: 24px;
+  color: white; text-align: center;
+}
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; overflow: hidden;
+  border: 3px solid rgba(255,255,255,0.4);
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
+.profile-city { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+.profile-email { font-size: 12px; opacity: 0.6; margin-top: 2px; }
+
+.section-card {
+  background: white; border-radius: var(--radius);
+  padding: 18px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.section-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.pet-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.pet-item:last-child { border-bottom: none; padding-bottom: 0; }
+.pet-item-img {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: linear-gradient(135deg, #FDE8E0, #FFD5C2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0; overflow: hidden;
+}
+.pet-item-img img { width: 100%; height: 100%; object-fit: cover; }
+.pet-item-info { flex: 1; }
+.pet-item-name { font-weight: 700; font-size: 14px; }
+.pet-item-detail { font-size: 12px; color: var(--muted); }
+
+/* ──────────────────────────────────────
+   MODAL
+────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex; align-items: flex-end; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+@media (min-width: 640px) {
+  .modal-overlay { align-items: center; }
+  .modal { border-radius: var(--radius-lg) !important; max-width: 480px !important; }
+}
+.modal {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-height: 92vh; overflow-y: auto;
+  padding: 24px;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
+.modal-close {
+  background: var(--bg); border: none;
+  width: 34px; height: 34px; border-radius: 9px;
+  cursor: pointer; font-size: 16px; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: var(--bg2); }
+
+/* ──────────────────────────────────────
+   NOTIFICATIONS
+────────────────────────────────────── */
+.notif-panel {
+  position: fixed; top: 12px; right: 12px;
+  background: white; border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 300px; z-index: 500;
+  padding: 16px; max-height: 380px; overflow-y: auto;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 768px) {
+  .notif-panel { top: 12px; right: 12px; left: calc(var(--sidebar) + 12px); right: auto; }
+}
+.notif-panel-title {
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  margin-bottom: 12px; color: var(--text);
+}
+.notif-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px; font-weight: 500; color: var(--text2);
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-icon { font-size: 22px; flex-shrink: 0; }
+
+/* ──────────────────────────────────────
+   FAB
+────────────────────────────────────── */
+.fab {
+  position: fixed; bottom: 76px; right: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; border: none;
+  width: 52px; height: 52px; border-radius: 50%;
+  font-size: 24px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(244,98,42,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 90; transition: transform 0.2s;
+}
+.fab:hover { transform: scale(1.08); }
+@media (min-width: 768px) {
+  .fab { bottom: 24px; right: 24px; }
+}
+
+/* ──────────────────────────────────────
+   IMAGE UPLOAD
+────────────────────────────────────── */
+.img-upload {
+  border: 2px dashed var(--border); border-radius: 12px;
+  padding: 20px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  color: var(--muted); font-size: 13px; font-weight: 600;
+}
+.img-upload:hover { border-color: var(--primary); background: var(--primary-dim); }
+.img-upload input { display: none; }
+.img-preview { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-top: 10px; }
+
+/* ──────────────────────────────────────
+   LOADER
+────────────────────────────────────── */
+.loader { display: flex; align-items: center; justify-content: center; padding: 40px; }
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ AUTH ══════════════════ -->
+<div id="authView">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="auth-logo-mark">🐾</div>
+      <h1>PawMatch</h1>
+      <p>Kedi ve köpekleri sahiplendiren, kayıp hayvanları bulan ve doğru sahipleriyle eşleştiren uygulama.</p>
+      <div class="auth-features">
+        <div class="auth-feat"><span>❤️</span> Akıllı eşleştirme sistemi</div>
+        <div class="auth-feat"><span>📍</span> Konuma göre kayıp ilanları</div>
+        <div class="auth-feat"><span>🏠</span> Barınak & sahiplendirme</div>
+        <div class="auth-feat"><span>💬</span> Anlık mesajlaşma</div>
+      </div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-card-title">Hoş Geldin 🐾</div>
+      <div class="auth-card-sub">Hesabına giriş yap veya yeni hesap oluştur</div>
+      <div class="tab-btns">
+        <button class="tab-btn active" onclick="switchAuthTab('login')">Giriş Yap</button>
+        <button class="tab-btn" onclick="switchAuthTab('register')">Kayıt Ol</button>
+      </div>
+      <!-- Login -->
+      <div id="loginForm">
+        <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="ornek@mail.com"></div>
+        <div class="form-group"><label>Şifre</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+        <div id="loginError" class="error-msg hidden"></div>
+        <button class="btn" onclick="doLogin()" style="margin-top:10px">Giriş Yap</button>
+      </div>
+      <!-- Register -->
+      <div id="registerForm" class="hidden">
+        <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="Adın Soyadın"></div>
+        <div class="form-group"><label>E-posta</label><input type="email" id="regEmail" placeholder="ornek@mail.com"></div>
+        <div class="form-group"><label>Şifre</label><input type="password" id="regPass" placeholder="En az 6 karakter"></div>
+        <div class="form-group"><label>Şehir</label>
+          <select id="regCity">
+            <option value="">Şehir Seç</option>
+            <option>Adana</option><option>Adıyaman</option><option>Afyonkarahisar</option><option>Ağrı</option><option>Amasya</option>
+            <option>Ankara</option><option>Antalya</option><option>Artvin</option><option>Aydın</option><option>Balıkesir</option>
+            <option>Bilecik</option><option>Bingöl</option><option>Bitlis</option><option>Bolu</option><option>Burdur</option>
+            <option>Bursa</option><option>Çanakkale</option><option>Çankırı</option><option>Çorum</option><option>Denizli</option>
+            <option>Diyarbakır</option><option>Edirne</option><option>Elazığ</option><option>Erzincan</option><option>Erzurum</option>
+            <option>Eskişehir</option><option>Gaziantep</option><option>Giresun</option><option>Gümüşhane</option><option>Hakkari</option>
+            <option>Hatay</option><option>Isparta</option><option>Mersin</option><option>İstanbul</option><option>İzmir</option>
+            <option>Kars</option><option>Kastamonu</option><option>Kayseri</option><option>Kırklareli</option><option>Kırşehir</option>
+            <option>Kocaeli</option><option>Konya</option><option>Kütahya</option><option>Malatya</option><option>Manisa</option>
+            <option>Kahramanmaraş</option><option>Mardin</option><option>Muğla</option><option>Muş</option><option>Nevşehir</option>
+            <option>Niğde</option><option>Ordu</option><option>Rize</option><option>Sakarya</option><option>Samsun</option>
+            <option>Siirt</option><option>Sinop</option><option>Sivas</option><option>Tekirdağ</option><option>Tokat</option>
+            <option>Trabzon</option><option>Tunceli</option><option>Şanlıurfa</option><option>Uşak</option><option>Van</option>
+            <option>Yozgat</option><option>Zonguldak</option><option>Aksaray</option><option>Bayburt</option><option>Karaman</option>
+            <option>Kırıkkale</option><option>Batman</option><option>Şırnak</option><option>Bartın</option><option>Ardahan</option>
+            <option>Iğdır</option><option>Yalova</option><option>Karabük</option><option>Kilis</option><option>Osmaniye</option><option>Düzce</option>
+          </select>
+        </div>
+        <div id="registerError" class="error-msg hidden"></div>
+        <button class="btn" onclick="doRegister()" style="margin-top:10px">Kayıt Ol</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MAIN APP ══════════════════ -->
+<div id="mainApp" class="hidden">
+
+  <!-- Mobile topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">🐾 PawMatch</div>
+    <button class="notif-btn" onclick="toggleNotifs()" id="notifBtn">
+      🔔<span class="notif-badge hidden" id="notifBadge">0</span>
+    </button>
+  </div>
+
+  <!-- Notifications panel -->
+  <div id="notifPanel" class="notif-panel hidden"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-inner">
+        <div class="sidebar-logo-mark">🐾</div>
+        <div class="sidebar-brand-text">PawMatch</div>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" onclick="showView('homeView')" id="nav-home">
+        <span class="nav-icon">🏠</span> Keşfet
+      </div>
+      <div class="nav-item" onclick="showView('matchesView')" id="nav-matches">
+        <span class="nav-icon">❤️</span> Eşleşmeler
+      </div>
+      <div class="nav-item" onclick="showView('mapView')" id="nav-map">
+        <span class="nav-icon">🗺️</span> Harita
+      </div>
+      <div class="nav-item" onclick="showView('lostView')" id="nav-lost">
+        <span class="nav-icon">😿</span> Kayıp & Bulunan
+      </div>
+      <div class="nav-item" onclick="showView('shelterView')" id="nav-shelter">
+        <span class="nav-icon">🏠</span> Barınak
+      </div>
+      <div class="nav-item" onclick="showView('profileView')" id="nav-profile">
+        <span class="nav-icon">👤</span> Profil
+      </div>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-notif" onclick="toggleNotifs()">
+        <span style="font-size:18px">🔔</span>
+        <span style="font-size:14px;font-weight:600;color:var(--text2)">Bildirimler</span>
+        <span class="notif-badge hidden" id="notifBadge2" style="position:static;margin-left:auto;background:var(--primary);color:white;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center">0</span>
+      </div>
+      <div class="nav-item" onclick="doLogout()" style="color:var(--red)">
+        <span class="nav-icon">🚪</span> Çıkış Yap
+      </div>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div class="view-content">
+
+    <!-- ── HOME VIEW ── -->
+    <div id="homeView" class="view active">
+      <!-- Left: swipe panel -->
+      <div class="home-left">
+        <div class="filter-bar" id="filterBar">
+          <button class="filter-chip active" onclick="setFilter('all',this)">Tümü</button>
+          <button class="filter-chip" onclick="setFilter('kedi',this)">🐱 Kedi</button>
+          <button class="filter-chip" onclick="setFilter('köpek',this)">🐶 Köpek</button>
+          <button class="filter-chip" onclick="setFilter('kuş',this)">🐦 Kuş</button>
+          <button class="filter-chip" onclick="setFilter('tavşan',this)">🐰 Tavşan</button>
+          <button class="filter-chip" onclick="setFilter('diğer',this)">🐾 Diğer</button>
+        </div>
+        <div class="swipe-area" id="swipeArea">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+        <div class="swipe-btns">
+          <button class="swipe-btn pass" onclick="swipePass()" title="Geç">✕</button>
+          <button class="swipe-btn super" onclick="swipeLike(true)" title="Süper Beğen">⭐</button>
+          <button class="swipe-btn like" onclick="swipeLike(false)" title="Beğen">❤️</button>
+        </div>
+      </div>
+      <!-- Right: stats + recent matches -->
+      <div class="home-right">
+        <div class="home-right-header">
+          <div class="view-title">Merhaba 👋</div>
+          <div class="view-sub">Bugün yeni bir dost bulmaya hazır mısın?</div>
+        </div>
+        <div class="home-stats" id="homeStats">
+          <div class="stat-card"><div class="stat-num" id="statPets">—</div><div class="stat-label">Toplam Hayvan</div></div>
+          <div class="stat-card"><div class="stat-num" id="statMatches">—</div><div class="stat-label">Eşleşme</div></div>
+          <div class="stat-card"><div class="stat-num" id="statLost">—</div><div class="stat-label">Kayıp İlanı</div></div>
+          <div class="stat-card"><div class="stat-num" id="statShelter">—</div><div class="stat-label">Yuva Arıyor</div></div>
+        </div>
+        <div class="home-recent-title">🔥 Son Eşleşmeler</div>
+        <div class="home-recent-list" id="homeMatchList">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MATCHES VIEW ── -->
+    <div id="matchesView" class="view">
+      <div class="view-header">
+        <div class="view-title">Eşleşmeler</div>
+        <div class="view-sub">İstekler, onaylanan eşleşmeler ve beğeniler</div>
+      </div>
+      <div class="view-body">
+        <div class="tabs">
+          <button class="tab active" onclick="switchMatchTab('requests',this)">İstekler</button>
+          <button class="tab" onclick="switchMatchTab('matches',this)">Eşleşmeler</button>
+          <button class="tab" onclick="switchMatchTab('likes',this)">Beğeniler</button>
+        </div>
+        <div id="matchContent"><div class="loader"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ── CHAT VIEW ── -->
+    <div id="chatView" class="view">
+      <div class="chat-header">
+        <button class="chat-back" onclick="showView('matchesView')">←</button>
+        <div class="chat-avatar" id="chatAvatar">🐾</div>
+        <div>
+          <div class="chat-name" id="chatName">—</div>
+          <div class="chat-status">Online</div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" placeholder="Mesaj yaz..." onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+
+    <!-- ── MAP VIEW ── -->
+    <div id="mapView" class="view">
+      <div class="view-header">
+        <div class="view-title">Harita</div>
+        <div class="view-sub">Yakınındaki hayvanlar</div>
+      </div>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div class="map-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div>Eşleşme</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Kayıp</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Barınak/Yuva</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOST VIEW ── -->
+    <div id="lostView" class="view">
+      <div class="view-header">
+        <div class="view-title">Kayıp & Bulunan</div>
+        <div class="view-sub">İlan ver, sahiplenenleri bul</div>
+      </div>
+      <div class="view-body">
+        <div id="lostList" class="card-grid">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="fab" id="lostFab" onclick="openAddLostModal()" style="display:none">+</button>
+
+    <!-- ── SHELTER VIEW ── -->
+    <div id="shelterView" class="view">
+      <div class="view-header">
+        <div class="view-title">Barınak & Yuva</div>
+        <div class="view-sub">Sahiplendirme ve geçici bakım ilanları</div>
+      </div>
+      <div class="view-body">
+        <div id="shelterList" class="card-grid">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="fab" id="shelterFab" onclick="openAddShelterModal()" style="display:none">+</button>
+
+    <!-- ── PROFILE VIEW ── -->
+    <div id="profileView" class="view">
+      <div class="view-header" style="padding-bottom:16px">
+        <div class="view-title">Profilim</div>
+      </div>
+      <div class="view-body" style="padding-top:0">
+        <div class="profile-layout">
+          <div class="profile-left">
+            <div class="profile-hero">
+              <div class="profile-avatar" id="profileAvatar">👤</div>
+              <div class="profile-name" id="profileName">—</div>
+              <div class="profile-city" id="profileCity">📍 —</div>
+              <div class="profile-email" id="profileEmail">—</div>
+            </div>
+          </div>
+          <div class="profile-right">
+            <div class="section-card">
+              <h3>🐾 Hayvanlarım</h3>
+              <div id="myPetsList"></div>
+              <button class="btn secondary sm" onclick="openAddPetModal()" style="margin-top:14px">+ Hayvan Ekle</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /view-content -->
+
+  <!-- Bottom nav (mobile) -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showView('homeView')" id="bnav-home">
+      <span class="nav-icon">🏠</span>Keşfet
+    </div>
+    <div class="nav-item" onclick="showView('matchesView')" id="bnav-matches">
+      <span class="nav-icon">❤️</span>Eşleşme
+    </div>
+    <div class="nav-item" onclick="showView('mapView')" id="bnav-map">
+      <span class="nav-icon">🗺️</span>Harita
+    </div>
+    <div class="nav-item" onclick="showView('lostView')" id="bnav-lost">
+      <span class="nav-icon">😿</span>Kayıp
+    </div>
+    <div class="nav-item" onclick="showView('shelterView')" id="bnav-shelter">
+      <span class="nav-icon">🏠</span>Barınak
+    </div>
+    <div class="nav-item" onclick="showView('profileView')" id="bnav-profile">
+      <span class="nav-icon">👤</span>Profil
+    </div>
+  </div>
+
+</div><!-- /mainApp -->
+
+<!-- ══════════════════ MODALS ══════════════════ -->
+
+<!-- Add Pet Modal -->
+<div class="modal-overlay hidden" id="addPetModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🐾 Hayvan Ekle</div>
+      <button class="modal-close" onclick="closeModal('addPetModal')">✕</button>
+    </div>
+    <div class="form-group"><label>Hayvan Adı</label><input type="text" id="petName" placeholder="Pamuk, Boncuk..."></div>
+    <div class="form-group"><label>Tür</label>
+      <select id="petSpecies">
+        <option value="kedi">🐱 Kedi</option>
+        <option value="köpek">🐶 Köpek</option>
+        <option value="kuş">🐦 Kuş</option>
+        <option value="tavşan">🐰 Tavşan</option>
+        <option value="hamster">🐹 Hamster</option>
+        <option value="balık">🐟 Balık</option>
+        <option value="diğer">🐾 Diğer</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Cins</label><input type="text" id="petBreed" placeholder="Tekir, Golden..."></div>
+    <div class="form-group"><label>Yaş</label><input type="number" id="petAge" placeholder="2" min="0" max="30"></div>
+    <div class="form-group"><label>Hakkında</label><textarea id="petBio" placeholder="Hayvanınız hakkında kısa bir şeyler yazın..."></textarea></div>
+    <div class="form-group"><label>Fotoğraf</label>
+      <div class="img-upload" onclick="document.getElementById('petPhoto').click()">
+        <div>📷 Fotoğraf Seç</div>
+        <input type="file" id="petPhoto" accept="image/*" onchange="previewImg(this,'petPhotoPreview')">
+        <img id="petPhotoPreview" class="img-preview hidden">
+      </div>
+    </div>
+    <div id="addPetError" class="error-msg hidden"></div>
+    <button class="btn" onclick="addPet()">Hayvanı Ekle 🐾</button>
+  </div>
+</div>
+
+<!-- Add Lost Modal -->
+<div class="modal-overlay hidden" id="addLostModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">😿 İlan Ver</div>
+      <button class="modal-close" onclick="closeModal('addLostModal')">✕</button>
+    </div>
+    <div class="form-group"><label>Durum</label>
+      <select id="lostType"><option value="lost">Kayıp</option><option value="found">Bulundu</option></select>
+    </div>
+    <div class="form-group"><label>Hayvan Adı / Tanım</label><input type="text" id="lostName" placeholder="Tekir, Sarı köpek..."></div>
+    <div class="form-group"><label>Tür</label>
+      <select id="lostSpecies">
+        <option value="kedi">🐱 Kedi</option><option value="köpek">🐶 Köpek</option>
+        <option value="kuş">🐦 Kuş</option><option value="diğer">🐾 Diğer</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Açıklama</label><textarea id="lostDesc" placeholder="Nerede, ne zaman, özellikler..."></textarea></div>
+    <div class="form-group"><label>İletişim (Tel/Instagram)</label><input type="text" id="lostContact" placeholder="05xx xxx xx xx"></div>
+    <div class="form-group"><label>Şehir</label><input type="text" id="lostCity" placeholder="İstanbul, Ankara..."></div>
+    <div class="form-group"><label>Fotoğraf</label>
+      <div class="img-upload" onclick="document.getElementById('lostPhoto').click()">
+        <div>📷 Fotoğraf Seç</div>
+        <input type="file" id="lostPhoto" accept="image/*" onchange="previewImg(this,'lostPhotoPreview')">
+        <img id="lostPhotoPreview" class="img-preview hidden">
+      </div>
+    </div>
+    <div id="addLostError" class="error-msg hidden"></div>
+    <button class="btn" onclick="addLostPet()">İlan Ver</button>
+  </div>
+</div>
+
+<!-- Add Shelter Modal -->
+<div class="modal-overlay hidden" id="addShelterModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🏠 İlan Ver</div>
+      <button class="modal-close" onclick="closeModal('addShelterModal')">✕</button>
+    </div>
+    <div class="form-group"><label>Tür</label>
+      <select id="shelterType">
+        <option value="barınak">Barınak</option>
+        <option value="yuva">Yuva Arıyor (Sahiplendirme)</option>
+        <option value="geçici">Geçici Bakım</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Başlık</label><input type="text" id="shelterName" placeholder="Minik'e Sıcak Yuva Arıyoruz..."></div>
+    <div class="form-group"><label>Açıklama</label><textarea id="shelterDesc" placeholder="Hayvan hakkında bilgiler, gereksinimler..."></textarea></div>
+    <div class="form-group"><label>İletişim</label><input type="text" id="shelterContact" placeholder="05xx xxx xx xx"></div>
+    <div class="form-group"><label>Şehir</label><input type="text" id="shelterCity" placeholder="İstanbul"></div>
+    <div class="form-group"><label>Fotoğraf</label>
+      <div class="img-upload" onclick="document.getElementById('shelterPhoto').click()">
+        <div>📷 Fotoğraf Seç</div>
+        <input type="file" id="shelterPhoto" accept="image/*" onchange="previewImg(this,'shelterPhotoPreview')">
+        <img id="shelterPhotoPreview" class="img-preview hidden">
+      </div>
+    </div>
+    <div id="addShelterError" class="error-msg hidden"></div>
+    <button class="btn secondary" onclick="addShelterPost()">İlan Ver 🏠</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// 🔥 FIREBASE CONFIG
+// ══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyBKD2mXoR1CtnNFQgQS_hdMEKji6tv3jsE",
+  authDomain: "pawmatch-98959.firebaseapp.com",
+  projectId: "pawmatch-98959",
+  storageBucket: "pawmatch-98959.firebasestorage.app",
+  messagingSenderId: "149222982020",
+  appId: "1:149222982020:web:5b3a0ab3d94a7f49669dd1",
+  measurementId: "G-FX1F0HNVD5"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let currentUser = null;
+let currentUserData = null;
+let activeFilter = 'all';
+let currentChatId = null;
+let chatListener = null;
+let mapInstance = null;
+let notifListener = null;
+let swipePets = [];
+let swipeIndex = 0;
+
+const speciesEmoji = { kedi:'🐱', köpek:'🐶', kuş:'🐦', tavşan:'🐰', hamster:'🐹', balık:'🐟', diğer:'🐾' };
+
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    currentUser = user;
+    await loadUserData();
+    document.getElementById('authView').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    showView('homeView');
+    loadNotifications();
+    loadHomeStats();
+  } else {
+    currentUser = null;
+    currentUserData = null;
+    document.getElementById('authView').classList.remove('hidden');
+    document.getElementById('mainApp').classList.add('hidden');
+  }
+});
+
+async function loadUserData() {
+  const snap = await db.collection('users').doc(currentUser.uid).get();
+  if (snap.exists) {
+    currentUserData = snap.data();
+  } else {
+    currentUserData = { displayName: currentUser.displayName || 'Kullanıcı', city: '', email: currentUser.email };
+  }
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register'));
+  });
+  document.getElementById('loginForm').classList.toggle('hidden', tab!=='login');
+  document.getElementById('registerForm').classList.toggle('hidden', tab!=='register');
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  err.classList.add('hidden');
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    err.textContent = 'E-posta veya şifre hatalı!';
+    err.classList.remove('hidden');
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const city = document.getElementById('regCity').value;
+  const err = document.getElementById('registerError');
+  err.classList.add('hidden');
+  if (!name || !email || !pass || !city) {
+    err.textContent = 'Tüm alanları doldur!'; err.classList.remove('hidden'); return;
+  }
+  if (pass.length < 6) {
+    err.textContent = 'Şifre en az 6 karakter olmalı!'; err.classList.remove('hidden'); return;
+  }
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    await db.collection('users').doc(cred.user.uid).set({
+      displayName: name, email, city,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) {
+    err.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kullanılıyor!' : 'Kayıt sırasında hata oluştu!';
+    err.classList.remove('hidden');
+  }
+}
+
+function doLogout() { auth.signOut(); }
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showView(view) {
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(view).classList.add('active');
+
+  // Update sidebar nav
+  const navMap = {
+    homeView: ['nav-home','bnav-home'],
+    matchesView: ['nav-matches','bnav-matches'],
+    mapView: ['nav-map','bnav-map'],
+    lostView: ['nav-lost','bnav-lost'],
+    shelterView: ['nav-shelter','bnav-shelter'],
+    profileView: ['nav-profile','bnav-profile']
+  };
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navMap[view]) {
+    navMap[view].forEach(id => { const el = document.getElementById(id); if(el) el.classList.add('active'); });
+  }
+
+  // FAB buttons
+  document.getElementById('lostFab').style.display = view === 'lostView' ? 'flex' : 'none';
+  document.getElementById('shelterFab').style.display = view === 'shelterView' ? 'flex' : 'none';
+
+  // Load data
+  if (view === 'homeView') loadPetsForSwipe();
+  if (view === 'matchesView') loadMatches('requests');
+  if (view === 'mapView') loadMap();
+  if (view === 'lostView') loadLostPets();
+  if (view === 'shelterView') loadShelter();
+  if (view === 'profileView') loadProfile();
+}
+
+// ══════════════════════════════════════════
+// HOME STATS
+// ══════════════════════════════════════════
+async function loadHomeStats() {
+  try {
+    const [petsSnap, matchesSnap, lostSnap, shelterSnap] = await Promise.all([
+      db.collection('pets').get(),
+      db.collection('matches').where('status','==','accepted').get(),
+      db.collection('lostPets').get(),
+      db.collection('shelters').get()
+    ]);
+    const s = id => document.getElementById(id);
+    if(s('statPets')) s('statPets').textContent = petsSnap.size;
+    if(s('statMatches')) s('statMatches').textContent = matchesSnap.size;
+    if(s('statLost')) s('statLost').textContent = lostSnap.size;
+    if(s('statShelter')) s('statShelter').textContent = shelterSnap.size;
+  } catch(e) {}
+
+  const hml = document.getElementById('homeMatchList');
+  if (!hml) return;
+  try {
+    const snap = await db.collection('matches').where('status','==','accepted').orderBy('createdAt','desc').limit(6).get();
+    if (snap.empty) { hml.innerHTML = '<div style="color:var(--muted);font-size:13px;font-weight:600;padding:12px 0">Henüz eşleşme yok.</div>'; return; }
+    hml.innerHTML = '';
+    snap.docs.forEach(doc => {
+      const m = doc.data();
+      const p1img = m.pet1Photo ? `<img src="${m.pet1Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+      const p2img = m.pet2Photo ? `<img src="${m.pet2Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+      hml.innerHTML += `<div class="match-card" style="cursor:default;margin-bottom:8px">
+        <div class="match-avatar" style="width:44px;height:44px">${p1img}</div>
+        <div class="match-info"><div class="match-name">${m.pet1Name} × ${m.pet2Name}</div><div class="match-preview">✅ Eşleşti!</div></div>
+        <div class="match-avatar" style="width:44px;height:44px">${p2img}</div>
+      </div>`;
+    });
+  } catch(e) { hml.innerHTML = ''; }
+}
+
+// ══════════════════════════════════════════
+// SWIPE
+// ══════════════════════════════════════════
+async function loadPetsForSwipe() {
+  const area = document.getElementById('swipeArea');
+  area.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  const myPetsSnap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
+  const myPetIds = myPetsSnap.docs.map(d => d.id);
+  let likedIds = [];
+  if (myPetIds.length > 0) {
+    const likesSnap = await db.collection('likes').where('fromPetId','in', myPetIds.slice(0,10)).get();
+    likedIds = likesSnap.docs.map(d => d.data().toPetId);
+  }
+  const snap = await db.collection('pets').where('ownerId','!=', currentUser.uid).orderBy('ownerId').limit(30).get();
+  swipePets = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .filter(p => !likedIds.includes(p.id) && !myPetIds.includes(p.id));
+  if (activeFilter !== 'all') {
+    swipePets = swipePets.filter(p => p.species === activeFilter);
+  }
+  swipeIndex = 0;
+  renderSwipeCard();
+}
+
+function renderSwipeCard() {
+  const area = document.getElementById('swipeArea');
+  if (swipeIndex >= swipePets.length) {
+    area.innerHTML = `<div class="empty-state">
+      <div class="big-emoji">🐾</div>
+      <h3>Hepsi bu kadar!</h3>
+      <p>Şimdilik yeni hayvan yok.<br>Daha sonra tekrar dene!</p>
+      <button class="btn sm" onclick="loadPetsForSwipe()">Yenile 🔄</button>
+    </div>`;
+    return;
+  }
+  const pet = swipePets[swipeIndex];
+  const emoji = speciesEmoji[pet.species] || '🐾';
+  const imgHtml = pet.photoURL
+    ? `<img src="${pet.photoURL}" style="width:100%;height:100%;object-fit:cover"><div class="pet-card-img-overlay"></div>`
+    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#FDE8E0,#FFD5C2);display:flex;align-items:center;justify-content:center;font-size:72px">${emoji}</div>`;
+  const rem = swipePets.length - swipeIndex;
+  area.innerHTML = `
+    <div class="pet-card" id="currentCard">
+      <div class="pet-card-img">${imgHtml}</div>
+      <div class="pet-card-info">
+        <div class="pet-card-name">${pet.name} <span style="font-size:18px">${emoji}</span></div>
+        <div class="pet-card-details">${pet.breed || ''} ${pet.breed && pet.age ? '·' : ''} ${pet.age ? pet.age + ' yaşında' : ''}</div>
+        <div class="pet-card-city">📍 ${pet.city || ''}</div>
+        <div class="pet-card-bio">${pet.bio || ''}</div>
+      </div>
+    </div>
+    ${rem > 1 ? `<div class="pet-card-count">${rem} hayvan</div>` : ''}`;
+}
+
+function setFilter(filter, el) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  activeFilter = filter;
+  loadPetsForSwipe();
+}
+
+async function swipeLike(isSuper) {
+  if (swipeIndex >= swipePets.length) return;
+  const pet = swipePets[swipeIndex];
+  const card = document.getElementById('currentCard');
+  if (card) { card.style.transform = 'translateX(120%) rotate(15deg)'; card.style.opacity = '0'; }
+  const myPetsSnap = await db.collection('pets').where('ownerId','==',currentUser.uid).limit(1).get();
+  const myPetId = myPetsSnap.empty ? null : myPetsSnap.docs[0].id;
+  if (myPetId) {
+    await db.collection('likes').add({
+      fromPetId: myPetId, toPetId: pet.id,
+      fromUserId: currentUser.uid, toUserId: pet.ownerId,
+      isSuper: isSuper || false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const mutualSnap = await db.collection('likes').where('fromPetId','==', pet.id).where('toPetId','==', myPetId).get();
+    if (!mutualSnap.empty) await createMatchRequest(myPetId, pet.id);
+  }
+  swipeIndex++;
+  setTimeout(renderSwipeCard, 250);
+}
+
+function swipePass() {
+  if (swipeIndex >= swipePets.length) return;
+  const card = document.getElementById('currentCard');
+  if (card) { card.style.transform = 'translateX(-120%) rotate(-15deg)'; card.style.opacity = '0'; }
+  swipeIndex++;
+  setTimeout(renderSwipeCard, 250);
+}
+
+async function createMatchRequest(pet1Id, pet2Id) {
+  const existing = await db.collection('matches')
+    .where('pet1Id','in',[pet1Id,pet2Id])
+    .where('pet2Id','in',[pet1Id,pet2Id]).get();
+  if (!existing.empty) return;
+  const [p1Snap, p2Snap] = await Promise.all([
+    db.collection('pets').doc(pet1Id).get(),
+    db.collection('pets').doc(pet2Id).get()
+  ]);
+  const p1 = p1Snap.data(); const p2 = p2Snap.data();
+  const matchRef = await db.collection('matches').add({
+    pet1Id, pet2Id,
+    user1Id: p1.ownerId, user2Id: p2.ownerId,
+    pet1Name: p1.name, pet2Name: p2.name,
+    pet1Photo: p1.photoURL || null, pet2Photo: p2.photoURL || null,
+    status: 'pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  await db.collection('notifications').add({
+    toUserId: p2.ownerId, type: 'match_request',
+    fromPetName: p1.name, fromPetPhoto: p1.photoURL || null,
+    matchId: matchRef.id, read: false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// ══════════════════════════════════════════
+// MATCHES
+// ══════════════════════════════════════════
+function switchMatchTab(tab, el) {
+  document.querySelectorAll('#matchesView .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  loadMatches(tab);
+}
+
+async function loadMatches(tab) {
+  const cont = document.getElementById('matchContent');
+  cont.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+
+  if (tab === 'requests') {
+    const snap = await db.collection('matches')
+      .where('user2Id','==',currentUser.uid)
+      .where('status','==','pending')
+      .orderBy('createdAt','desc').get();
+    if (snap.empty) {
+      cont.innerHTML = `<div class="empty-state"><div class="big-emoji">💌</div><h3>Henüz istek yok</h3><p>Beğeniler eşleşince burada görünür</p></div>`;
+      return;
+    }
+    cont.innerHTML = '';
+    snap.docs.forEach(doc => {
+      const m = doc.data();
+      const img = m.pet1Photo ? `<img src="${m.pet1Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+      cont.innerHTML += `<div class="match-card">
+        <div class="match-avatar">${img}</div>
+        <div class="match-info">
+          <div class="match-name">${m.pet1Name}</div>
+          <div class="match-preview">Eşleşmek istiyor! 🐾</div>
+        </div>
+        <div class="match-actions">
+          <button class="accept-btn" onclick="respondMatch('${doc.id}','accepted')">✓ Kabul</button>
+          <button class="reject-btn" onclick="respondMatch('${doc.id}','rejected')">✕</button>
+        </div>
+      </div>`;
+    });
+  } else if (tab === 'matches') {
+    const [s1, s2] = await Promise.all([
+      db.collection('matches').where('user1Id','==',currentUser.uid).where('status','==','accepted').orderBy('createdAt','desc').get(),
+      db.collection('matches').where('user2Id','==',currentUser.uid).where('status','==','accepted').orderBy('createdAt','desc').get()
+    ]);
+    const docs = [...s1.docs, ...s2.docs];
+    if (!docs.length) {
+      cont.innerHTML = `<div class="empty-state"><div class="big-emoji">❤️</div><h3>Henüz eşleşme yok</h3><p>Hayvanları beğen, eşleşmeleri bekle!</p></div>`;
+      return;
+    }
+    cont.innerHTML = '';
+    docs.forEach(doc => {
+      const m = doc.data();
+      const isUser1 = m.user1Id === currentUser.uid;
+      const partnerName = isUser1 ? m.pet2Name : m.pet1Name;
+      const partnerPhoto = isUser1 ? m.pet2Photo : m.pet1Photo;
+      const img = partnerPhoto ? `<img src="${partnerPhoto}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+      cont.innerHTML += `<div class="match-card" onclick="openChat('${doc.id}','${partnerName}','${partnerPhoto||''}')">
+        <div class="match-avatar">${img}</div>
+        <div class="match-info">
+          <div class="match-name">${partnerName}</div>
+          <div class="match-preview">Mesaj gönder →</div>
+        </div>
+        <span style="font-size:20px">💬</span>
+      </div>`;
+    });
+  } else if (tab === 'likes') {
+    const myPetsSnap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
+    const myPetIds = myPetsSnap.docs.map(d => d.id);
+    if (!myPetIds.length) {
+      cont.innerHTML = `<div class="empty-state"><div class="big-emoji">🐾</div><h3>Önce hayvan ekle</h3></div>`;
+      return;
+    }
+    const snap = await db.collection('likes').where('toPetId','in',myPetIds.slice(0,10)).orderBy('createdAt','desc').get();
+    if (snap.empty) {
+      cont.innerHTML = `<div class="empty-state"><div class="big-emoji">👀</div><h3>Henüz beğeni yok</h3></div>`;
+      return;
+    }
+    cont.innerHTML = '';
+    for (const doc of snap.docs) {
+      const l = doc.data();
+      const petSnap = await db.collection('pets').doc(l.fromPetId).get();
+      if (!petSnap.exists) continue;
+      const pet = petSnap.data();
+      const emoji = speciesEmoji[pet.species] || '🐾';
+      const img = pet.photoURL ? `<img src="${pet.photoURL}" style="width:100%;height:100%;object-fit:cover">` : emoji;
+      cont.innerHTML += `<div class="match-card" style="cursor:default">
+        <div class="match-avatar">${img}</div>
+        <div class="match-info">
+          <div class="match-name">${pet.name}</div>
+          <div class="match-preview">${l.isSuper ? '⭐ Süper beğendi!' : '❤️ Beğendi'}</div>
+        </div>
+      </div>`;
+    }
+  }
+}
+
+async function respondMatch(matchId, status) {
+  await db.collection('matches').doc(matchId).update({ status });
+  loadMatches('requests');
+}
+
+// ══════════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════════
+function openChat(matchId, petName, petPhoto) {
+  currentChatId = matchId;
+  document.getElementById('chatName').textContent = petName;
+  const avatarEl = document.getElementById('chatAvatar');
+  avatarEl.innerHTML = petPhoto ? `<img src="${petPhoto}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
+  showView('chatView');
+  loadChatMessages(matchId);
+}
+
+function loadChatMessages(matchId) {
+  const msgsEl = document.getElementById('chatMessages');
+  msgsEl.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  if (chatListener) chatListener();
+  chatListener = db.collection('matches').doc(matchId)
+    .collection('messages').orderBy('createdAt','asc')
+    .onSnapshot(snap => {
+      msgsEl.innerHTML = '';
+      snap.docs.forEach(doc => {
+        const m = doc.data();
+        const isMine = m.senderId === currentUser.uid;
+        const time = m.createdAt ? new Date(m.createdAt.seconds*1000).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : '';
+        msgsEl.innerHTML += `<div class="msg ${isMine?'mine':'theirs'}">
+          ${m.text}
+          <div class="msg-time">${time}</div>
+        </div>`;
+      });
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+    });
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !currentChatId) return;
+  input.value = '';
+  await db.collection('matches').doc(currentChatId)
+    .collection('messages').add({
+      text, senderId: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+}
+
+// ══════════════════════════════════════════
+// MAP
+// ══════════════════════════════════════════
+async function loadMap() {
+  await new Promise(r => setTimeout(r, 100));
+  const mapEl = document.getElementById('map');
+  if (!mapEl) return;
+  if (!mapInstance) {
+    mapInstance = L.map('map').setView([39.9, 32.8], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(mapInstance);
+  }
+  // Add markers for pets
+  try {
+    const snap = await db.collection('pets').where('lat','!=',null).limit(50).get();
+    snap.docs.forEach(doc => {
+      const p = doc.data();
+      if (p.lat && p.lng) {
+        L.circleMarker([p.lat, p.lng], { radius: 8, fillColor: '#F4622A', color: '#fff', fillOpacity: 0.9, weight: 2 })
+          .addTo(mapInstance)
+          .bindPopup(`<b>${p.name}</b><br>${p.species || ''} · ${p.city || ''}`);
+      }
+    });
+  } catch(e) {}
+  try {
+    const snap = await db.collection('lostPets').where('lat','!=',null).limit(30).get();
+    snap.docs.forEach(doc => {
+      const p = doc.data();
+      if (p.lat && p.lng) {
+        L.circleMarker([p.lat, p.lng], { radius: 8, fillColor: '#E53E3E', color: '#fff', fillOpacity: 0.9, weight: 2 })
+          .addTo(mapInstance)
+          .bindPopup(`<b>${p.name}</b><br>Kayıp · ${p.city || ''}`);
+      }
+    });
+  } catch(e) {}
+  setTimeout(() => mapInstance.invalidateSize(), 200);
+}
+
+// ══════════════════════════════════════════
+// LOST PETS
+// ══════════════════════════════════════════
+async function loadLostPets() {
+  const list = document.getElementById('lostList');
+  list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  try {
+    const snap = await db.collection('lostPets').orderBy('createdAt','desc').limit(50).get();
+    if (snap.empty) {
+      list.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="big-emoji">😿</div><h3>Henüz ilan yok</h3><p>İlk ilanı sen ver!</p></div>`;
+      return;
+    }
+    list.innerHTML = '';
+    snap.docs.forEach(doc => {
+      const p = doc.data();
+      const emoji = speciesEmoji[p.species] || '🐾';
+      const imgHtml = p.photoURL ? `<img src="${p.photoURL}" style="width:100%;height:100%;object-fit:cover">` : `<span style="font-size:56px">${emoji}</span>`;
+      const badgeClass = p.type === 'found' ? 'found' : 'lost';
+      const badgeText = p.type === 'found' ? '✓ Bulundu' : '! Kayıp';
+      list.innerHTML += `<div class="lost-card">
+        <div class="lost-card-img">${imgHtml}</div>
+        <div class="lost-card-body">
+          <span class="badge ${badgeClass}">${badgeText}</span>
+          <div class="lost-card-name">${p.name || 'İsimsiz'}</div>
+          <div class="lost-card-desc">${p.desc || ''}</div>
+          <div class="lost-card-footer">
+            <span class="lost-contact">${p.contact || ''}</span>
+            <span style="font-size:12px;color:var(--muted);font-weight:500">📍 ${p.city || ''}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+  } catch(e) { list.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>Yüklenirken hata oluştu.</p></div>`; }
+}
+
+function openAddLostModal() {
+  document.getElementById('addLostModal').classList.remove('hidden');
+}
+
+async function addLostPet() {
+  const type = document.getElementById('lostType').value;
+  const name = document.getElementById('lostName').value.trim();
+  const species = document.getElementById('lostSpecies').value;
+  const desc = document.getElementById('lostDesc').value.trim();
+  const contact = document.getElementById('lostContact').value.trim();
+  const city = document.getElementById('lostCity').value.trim();
+  const file = document.getElementById('lostPhoto').files[0];
+  const err = document.getElementById('addLostError');
+  err.classList.add('hidden');
+  if (!name || !contact) { err.textContent = 'İsim ve iletişim zorunlu!'; err.classList.remove('hidden'); return; }
+  try {
+    let photoURL = null;
+    if (file) photoURL = await uploadImage(file, `lostPets/${Date.now()}_${file.name}`);
+    await db.collection('lostPets').add({
+      type, name, species, desc, contact, city, photoURL,
+      ownerId: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal('addLostModal');
+    loadLostPets();
+  } catch(e) { err.textContent = 'Hata oluştu: ' + e.message; err.classList.remove('hidden'); }
+}
+
+// ══════════════════════════════════════════
+// SHELTER
+// ══════════════════════════════════════════
+async function loadShelter() {
+  const list = document.getElementById('shelterList');
+  list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  try {
+    const snap = await db.collection('shelters').orderBy('createdAt','desc').limit(50).get();
+    if (snap.empty) {
+      list.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="big-emoji">🏠</div><h3>Henüz ilan yok</h3><p>İlk ilanı sen ver!</p></div>`;
+      return;
+    }
+    list.innerHTML = '';
+    snap.docs.forEach(doc => {
+      const p = doc.data();
+      const typeMap = { 'barınak': ['shelter','Barınak'], 'yuva': ['shelter','Yuva Arıyor'], 'geçici': ['temp','Geçici Bakım'] };
+      const [badgeCls, badgeTxt] = typeMap[p.type] || ['shelter','İlan'];
+      const imgHtml = p.photoURL ? `<img src="${p.photoURL}" style="width:100%;height:100%;object-fit:cover">` : `<span style="font-size:40px">🏠</span>`;
+      list.innerHTML += `<div class="shelter-card">
+        <div class="shelter-card-img">${imgHtml}</div>
+        <div class="shelter-card-body">
+          <span class="badge ${badgeCls}" style="background:var(--primary-dim);color:var(--primary)">${badgeTxt}</span>
+          <div class="shelter-name">${p.name || ''}</div>
+          <div class="shelter-desc">${p.desc || ''}</div>
+          <div class="shelter-city">📍 ${p.city || ''} · ${p.contact || ''}</div>
+        </div>
+      </div>`;
+    });
+  } catch(e) { list.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>Yüklenirken hata oluştu.</p></div>`; }
+}
+
+function openAddShelterModal() {
+  document.getElementById('addShelterModal').classList.remove('hidden');
+}
+
+async function addShelterPost() {
+  const type = document.getElementById('shelterType').value;
+  const name = document.getElementById('shelterName').value.trim();
+  const desc = document.getElementById('shelterDesc').value.trim();
+  const contact = document.getElementById('shelterContact').value.trim();
+  const city = document.getElementById('shelterCity').value.trim();
+  const file = document.getElementById('shelterPhoto').files[0];
+  const err = document.getElementById('addShelterError');
+  err.classList.add('hidden');
+  if (!name) { err.textContent = 'Başlık zorunlu!'; err.classList.remove('hidden'); return; }
+  try {
+    let photoURL = null;
+    if (file) photoURL = await uploadImage(file, `shelters/${Date.now()}_${file.name}`);
+    await db.collection('shelters').add({
+      type, name, desc, contact, city, photoURL,
+      ownerId: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal('addShelterModal');
+    loadShelter();
+  } catch(e) { err.textContent = 'Hata oluştu: ' + e.message; err.classList.remove('hidden'); }
+}
+
+// ══════════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════════
+async function loadProfile() {
+  if (!currentUserData) await loadUserData();
+  const ud = currentUserData || {};
+  document.getElementById('profileName').textContent = ud.displayName || currentUser.displayName || '—';
+  document.getElementById('profileCity').textContent = '📍 ' + (ud.city || 'Şehir belirtilmemiş');
+  document.getElementById('profileEmail').textContent = currentUser.email || '—';
+  const avatarEl = document.getElementById('profileAvatar');
+  if (currentUser.photoURL) {
+    avatarEl.innerHTML = `<img src="${currentUser.photoURL}" style="width:100%;height:100%;object-fit:cover">`;
+  }
+  loadMyPets();
+}
+
+async function loadMyPets() {
+  const list = document.getElementById('myPetsList');
+  list.innerHTML = '<div class="loader" style="padding:20px"><div class="spinner"></div></div>';
+  const snap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
+  if (snap.empty) {
+    list.innerHTML = '<p style="font-size:13px;color:var(--muted);font-weight:500;padding:8px 0">Henüz hayvan eklemediniz.</p>';
+    return;
+  }
+  list.innerHTML = '';
+  snap.docs.forEach(doc => {
+    const p = doc.data();
+    const emoji = speciesEmoji[p.species] || '🐾';
+    const img = p.photoURL ? `<img src="${p.photoURL}" style="width:100%;height:100%;object-fit:cover">` : emoji;
+    list.innerHTML += `<div class="pet-item">
+      <div class="pet-item-img">${img}</div>
+      <div class="pet-item-info">
+        <div class="pet-item-name">${p.name}</div>
+        <div class="pet-item-detail">${p.species || ''} ${p.breed ? '· ' + p.breed : ''} ${p.age ? '· ' + p.age + ' yaş' : ''}</div>
+      </div>
+    </div>`;
+  });
+}
+
+function openAddPetModal() {
+  document.getElementById('addPetModal').classList.remove('hidden');
+}
+
+async function addPet() {
+  const name = document.getElementById('petName').value.trim();
+  const species = document.getElementById('petSpecies').value;
+  const breed = document.getElementById('petBreed').value.trim();
+  const age = parseInt(document.getElementById('petAge').value) || null;
+  const bio = document.getElementById('petBio').value.trim();
+  const file = document.getElementById('petPhoto').files[0];
+  const err = document.getElementById('addPetError');
+  err.classList.add('hidden');
+  if (!name) { err.textContent = 'Hayvan adı zorunlu!'; err.classList.remove('hidden'); return; }
+  try {
+    let photoURL = null;
+    if (file) photoURL = await uploadImage(file, `pets/${Date.now()}_${file.name}`);
+    await db.collection('pets').add({
+      name, species, breed, age, bio, photoURL,
+      ownerId: currentUser.uid,
+      city: currentUserData?.city || '',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal('addPetModal');
+    loadMyPets();
+    loadHomeStats();
+  } catch(e) { err.textContent = 'Hata: ' + e.message; err.classList.remove('hidden'); }
+}
+
+// ══════════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════════
+function loadNotifications() {
+  if (!currentUser) return;
+  notifListener = db.collection('notifications')
+    .where('toUserId','==',currentUser.uid)
+    .where('read','==',false)
+    .orderBy('createdAt','desc')
+    .onSnapshot(snap => {
+      const count = snap.size;
+      const badge1 = document.getElementById('notifBadge');
+      const badge2 = document.getElementById('notifBadge2');
+      if (count > 0) {
+        if(badge1) { badge1.textContent = count; badge1.classList.remove('hidden'); }
+        if(badge2) { badge2.textContent = count; badge2.style.display = 'flex'; }
+      } else {
+        if(badge1) badge1.classList.add('hidden');
+        if(badge2) badge2.style.display = 'none';
+      }
+      const panel = document.getElementById('notifPanel');
+      if (!panel.classList.contains('hidden')) renderNotifPanel(snap.docs);
+    });
+}
+
+function toggleNotifs() {
+  const panel = document.getElementById('notifPanel');
+  panel.classList.toggle('hidden');
+  if (!panel.classList.contains('hidden')) {
+    db.collection('notifications').where('toUserId','==',currentUser.uid)
+      .where('read','==',false).orderBy('createdAt','desc').get()
+      .then(snap => renderNotifPanel(snap.docs));
+  }
+}
+
+function renderNotifPanel(docs) {
+  const panel = document.getElementById('notifPanel');
+  panel.innerHTML = `<div class="notif-panel-title">🔔 Bildirimler</div>`;
+  if (!docs.length) { panel.innerHTML += '<div style="font-size:13px;color:var(--muted);font-weight:500;padding:8px 0">Yeni bildirim yok.</div>'; return; }
+  docs.forEach(doc => {
+    const n = doc.data();
+    let text = '';
+    if (n.type === 'match_request') text = `<b>${n.fromPetName}</b> eşleşmek istiyor!`;
+    panel.innerHTML += `<div class="notif-item" onclick="markRead('${doc.id}')">
+      <span class="notif-icon">${n.fromPetPhoto ? `<img src="${n.fromPetPhoto}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">` : '🐾'}</span>
+      <span>${text}</span>
+    </div>`;
+  });
+}
+
+async function markRead(id) {
+  await db.collection('notifications').doc(id).update({ read: true });
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+async function uploadImage(file, path) {
+  const ref = storage.ref(path);
+  await ref.put(file);
+  return await ref.getDownloadURL();
+}
+
+function previewImg(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(previewId);
+    img.src = e.target.result;
+    img.classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.add('hidden');
+  });
+});
+
+// Close notif panel on outside click
+document.addEventListener('click', e => {
+  const panel = document.getElementById('notifPanel');
+  const btn = document.getElementById('notifBtn');
+  const sidebarNotif = document.querySelector('.sidebar-notif');
+  if (panel && !panel.contains(e.target) && e.target !== btn && e.target !== sidebarNotif && !sidebarNotif?.contains(e.target)) {
+    panel.classList.add('hidden');
+  }
+});
+</script>
+</body>
+</html>
