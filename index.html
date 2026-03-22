@@ -627,7 +627,7 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
 
 <script>
 // ============================================================
-// 🔥 FIREBASE CONFIG — KEND&#304; B&#304;LG&#304;LER&#304;N&#304; BURAYA YAZ!
+// 🔥 FIREBASE CONFIG — KENDİ BİLGİLERİNİ BURAYA YAZ!
 // ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBKD2mXoR1CtnNFQgQS_hdMEKji6tv3jsE",
@@ -657,7 +657,7 @@ let mapInstance = null;
 let notifListener = null;
 
 // Species emojis
-const speciesEmoji = { kedi:'🐱', k&#246;pek:'🐶', ku&#351;:'🐦', tav&#351;an:'🐰', hamster:'🐹', bal&#305;k:'🐟', di&#287;er:'🐾' };
+const speciesEmoji = { kedi:'🐱', köpek:'🐶', kuş:'🐦', tavşan:'🐰', hamster:'🐹', balık:'🐟', diğer:'🐾' };
 
 // ===== AUTH =====
 auth.onAuthStateChanged(async (user) => {
@@ -686,7 +686,7 @@ async function loadUserData() {
   if (snap.exists) {
     currentUserData = snap.data();
   } else {
-    currentUserData = { displayName: currentUser.displayName || 'Kullan&#305;c&#305;', city: '', email: currentUser.email };
+    currentUserData = { displayName: currentUser.displayName || 'Kullanıcı', city: '', email: currentUser.email };
   }
 }
 
@@ -718,7 +718,7 @@ async function loadHomeStats() {
   if (!hml) return;
   try {
     const snap = await db.collection('matches').where('status','==','accepted').orderBy('createdAt','desc').limit(8).get();
-    if (snap.empty) { hml.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600">Hen&#252;z e&#351;le&#351;me yok.</div>'; return; }
+    if (snap.empty) { hml.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600">Henüz eşleşme yok.</div>'; return; }
     hml.innerHTML = '';
     snap.docs.forEach(doc => {
       const m = doc.data();
@@ -726,7 +726,7 @@ async function loadHomeStats() {
       const p2img = m.pet2Photo ? `<img src="${m.pet2Photo}" style="width:100%;height:100%;object-fit:cover">` : '🐾';
       hml.innerHTML += `<div class="match-card" style="cursor:default">
         <div class="match-avatar" style="width:44px;height:44px">${p1img}</div>
-        <div class="match-info"><div class="match-name">${m.pet1Name} × ${m.pet2Name}</div><div class="match-preview">✅ E&#351;le&#351;ti!</div></div>
+        <div class="match-info"><div class="match-name">${m.pet1Name} × ${m.pet2Name}</div><div class="match-preview">✅ Eşleşti!</div></div>
         <div class="match-avatar" style="width:44px;height:44px">${p2img}</div>
       </div>`;
     });
@@ -741,7 +741,7 @@ async function doLogin() {
   try {
     await auth.signInWithEmailAndPassword(email, pass);
   } catch(e) {
-    err.textContent = 'E-posta veya &#351;ifre hatal&#305;!';
+    err.textContent = 'E-posta veya şifre hatalı!';
     err.classList.remove('hidden');
   }
 }
@@ -754,10 +754,10 @@ async function doRegister() {
   const err = document.getElementById('registerError');
   err.classList.add('hidden');
   if (!name || !email || !pass || !city) {
-    err.textContent = 'T&#252;m alanlar&#305; doldur!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Tüm alanları doldur!'; err.classList.remove('hidden'); return;
   }
   if (pass.length < 6) {
-    err.textContent = '&#350;ifre en az 6 karakter olmal&#305;!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Şifre en az 6 karakter olmalı!'; err.classList.remove('hidden'); return;
   }
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
@@ -766,7 +766,7 @@ async function doRegister() {
       displayName: name, email, city, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
   } catch(e) {
-    err.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kullan&#305;l&#305;yor!' : 'Kay&#305;t s&#305;ras&#305;nda hata olu&#351;tu!';
+    err.textContent = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kullanılıyor!' : 'Kayıt sırasında hata oluştu!';
     err.classList.remove('hidden');
   }
 }
@@ -777,7 +777,7 @@ async function doGoogleLogin() {
   try {
     await auth.signInWithRedirect(provider);
   } catch(e) {
-    if (err) { err.textContent = 'Google ile giri&#351; ba&#351;ar&#305;s&#305;z. L&#252;tfen tekrar dene.'; err.classList.remove('hidden'); }
+    if (err) { err.textContent = 'Google ile giriş başarısız. Lütfen tekrar dene.'; err.classList.remove('hidden'); }
   }
 }
 
@@ -788,7 +788,7 @@ auth.getRedirectResult().then(async (result) => {
     const snap = await db.collection('users').doc(user.uid).get();
     if (!snap.exists) {
       await db.collection('users').doc(user.uid).set({
-        displayName: user.displayName || 'Kullan&#305;c&#305;',
+        displayName: user.displayName || 'Kullanıcı',
         email: user.email,
         city: '',
         photoURL: user.photoURL || null,
@@ -862,7 +862,7 @@ async function loadPetsForSwipe() {
 function renderSwipeCard() {
   const area = document.getElementById('swipeArea');
   if (swipeIndex >= swipePets.length) {
-    area.innerHTML = `<div class="empty-state"><div class="big-emoji">🐾</div><h3>Hepsi bu kadar!</h3><p style="color:var(--muted);font-weight:600">&#350;imdilik yeni hayvan yok.<br>Daha sonra tekrar dene!</p><br><button class="btn sm" onclick="loadPetsForSwipe()" style="margin:0 auto;display:block;width:auto">Yenile 🔄</button></div>`;
+    area.innerHTML = `<div class="empty-state"><div class="big-emoji">🐾</div><h3>Hepsi bu kadar!</h3><p style="color:var(--muted);font-weight:600">Şimdilik yeni hayvan yok.<br>Daha sonra tekrar dene!</p><br><button class="btn sm" onclick="loadPetsForSwipe()" style="margin:0 auto;display:block;width:auto">Yenile 🔄</button></div>`;
     return;
   }
   const pet = swipePets[swipeIndex];
@@ -876,7 +876,7 @@ function renderSwipeCard() {
       <div class="pet-card-img">${imgHtml}</div>
       <div class="pet-card-info">
         <div class="pet-card-name">${pet.name} <span style="font-size:18px">${emoji}</span></div>
-        <div class="pet-card-details">${pet.breed || ''} • ${pet.age ? pet.age + ' ya&#351;&#305;nda' : ''}</div>
+        <div class="pet-card-details">${pet.breed || ''} • ${pet.age ? pet.age + ' yaşında' : ''}</div>
         <div class="pet-card-city">📍 ${pet.city || ''}</div>
         <div class="pet-card-bio">${pet.bio || ''}</div>
       </div>
@@ -994,7 +994,7 @@ async function loadMatches(tab) {
       .orderBy('createdAt','desc').get();
     
     if (snap.empty) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">💌</div><h3>Hen&#252;z istek yok</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">💌</div><h3>Henüz istek yok</h3></div>';
       return;
     }
     cont.innerHTML = '';
@@ -1007,7 +1007,7 @@ async function loadMatches(tab) {
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${m.pet1Name}</div>
-            <div class="match-preview">E&#351;le&#351;me iste&#287;i g&#246;nderdi!</div>
+            <div class="match-preview">Eşleşme isteği gönderdi!</div>
           </div>
           <div class="match-actions">
             <button class="accept-btn" onclick="respondMatch('${doc.id}','accepted','${m.user1Id}')">✓ Kabul</button>
@@ -1022,7 +1022,7 @@ async function loadMatches(tab) {
     const all = [...snap1.docs, ...snap2.docs];
     
     if (all.length === 0) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">🐾</div><h3>Hen&#252;z e&#351;le&#351;me yok</h3><p style="color:var(--muted);font-weight:600">Hayvanlar&#305; be&#287;en, e&#351;le&#351;ince<br>sohbet ba&#351;layabilirsin!</p></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">🐾</div><h3>Henüz eşleşme yok</h3><p style="color:var(--muted);font-weight:600">Hayvanları beğen, eşleşince<br>sohbet başlayabilirsin!</p></div>';
       return;
     }
     cont.innerHTML = '';
@@ -1037,22 +1037,22 @@ async function loadMatches(tab) {
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${otherName}</div>
-            <div class="match-preview">Sohbet ba&#351;latabilirsin!</div>
+            <div class="match-preview">Sohbet başlatabilirsin!</div>
           </div>
           <div style="font-size:22px">💬</div>
         </div>`;
     });
   } else if (tab === 'likes') {
-    // Be&#287;enilerim (likes I sent)
+    // Beğenilerim (likes I sent)
     const myPetsSnap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
     const myPetIds = myPetsSnap.docs.map(d => d.id);
     if (myPetIds.length === 0) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>&#214;nce hayvan ekle</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>Önce hayvan ekle</h3></div>';
       return;
     }
     const snap = await db.collection('likes').where('fromPetId','in',myPetIds.slice(0,10)).get();
     if (snap.empty) {
-      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>Hen&#252;z be&#287;eni yok</h3></div>';
+      cont.innerHTML = '<div class="empty-state"><div class="big-emoji">❤️</div><h3>Henüz beğeni yok</h3></div>';
       return;
     }
     cont.innerHTML = '';
@@ -1068,7 +1068,7 @@ async function loadMatches(tab) {
           <div class="match-avatar">${imgHtml}</div>
           <div class="match-info">
             <div class="match-name">${pet.name} ${emoji}</div>
-            <div class="match-preview">📍 ${pet.city || ''} • ${l.isSuper ? '⭐ S&#252;per be&#287;eni' : '❤️ Be&#287;enildi'}</div>
+            <div class="match-preview">📍 ${pet.city || ''} • ${l.isSuper ? '⭐ Süper beğeni' : '❤️ Beğenildi'}</div>
           </div>
         </div>`;
     }
@@ -1166,7 +1166,7 @@ async function loadMap() {
     if (p.location && p.location.lat) {
       L.circleMarker([p.location.lat, p.location.lng], {
         radius: 10, fillColor: '#e74c3c', color: '#fff', weight: 2, fillOpacity: 0.9
-      }).addTo(mapInstance).bindPopup(`<b>${p.status==='lost'?'😿 Kay&#305;p':'✅ Bulundu'}</b><br>${p.petName}<br>📍 ${p.city||''}`);
+      }).addTo(mapInstance).bindPopup(`<b>${p.status==='lost'?'😿 Kayıp':'✅ Bulundu'}</b><br>${p.petName}<br>📍 ${p.city||''}`);
     }
   });
 }
@@ -1177,7 +1177,7 @@ async function loadLostPets() {
   list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
   const snap = await db.collection('lostPets').orderBy('createdAt','desc').limit(20).get();
   if (snap.empty) {
-    list.innerHTML = '<div class="empty-state"><div class="big-emoji">😿</div><h3>Hen&#252;z ilan yok</h3><p style="color:var(--muted);font-weight:600">Kay&#305;p ilan&#305; vermek i&#231;in + butonuna t&#305;kla</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="big-emoji">😿</div><h3>Henüz ilan yok</h3><p style="color:var(--muted);font-weight:600">Kayıp ilanı vermek için + butonuna tıkla</p></div>';
     return;
   }
   list.innerHTML = '';
@@ -1189,7 +1189,7 @@ async function loadLostPets() {
       <div class="lost-card">
         <div class="lost-card-img" style="height:200px;overflow:hidden">${imgHtml}</div>
         <div class="lost-card-body">
-          <span class="lost-badge ${p.status}">${p.status==='lost'?'😿 Kay&#305;p':'✅ Bulundu'}</span>
+          <span class="lost-badge ${p.status}">${p.status==='lost'?'😿 Kayıp':'✅ Bulundu'}</span>
           <div class="lost-card-name">${p.petName} ${emoji}</div>
           <div class="lost-card-desc">${p.description || ''}</div>
           <div class="lost-card-footer">
@@ -1211,7 +1211,7 @@ async function addLostPet() {
   const err = document.getElementById('addLostError');
   err.classList.add('hidden');
   if (!petName || !description || !contact) {
-    err.textContent = 'Ad, a&#231;&#305;klama ve ileti&#351;im zorunlu!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Ad, açıklama ve iletişim zorunlu!'; err.classList.remove('hidden'); return;
   }
   const file = document.getElementById('lostPhoto').files[0];
   let photoURL = null;
@@ -1231,7 +1231,7 @@ async function loadShelter() {
   list.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
   const snap = await db.collection('shelters').orderBy('createdAt','desc').limit(20).get();
   if (snap.empty) {
-    list.innerHTML = '<div class="empty-state"><div class="big-emoji">🏠</div><h3>Hen&#252;z ilan yok</h3><p style="color:var(--muted);font-weight:600">&#304;lan vermek i&#231;in + butonuna t&#305;kla</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="big-emoji">🏠</div><h3>Henüz ilan yok</h3><p style="color:var(--muted);font-weight:600">İlan vermek için + butonuna tıkla</p></div>';
     return;
   }
   list.innerHTML = '';
@@ -1260,7 +1260,7 @@ async function addShelterPost() {
   const err = document.getElementById('addShelterError');
   err.classList.add('hidden');
   if (!name || !contact) {
-    err.textContent = 'Ba&#351;l&#305;k ve ileti&#351;im zorunlu!'; err.classList.remove('hidden'); return;
+    err.textContent = 'Başlık ve iletişim zorunlu!'; err.classList.remove('hidden'); return;
   }
   const file = document.getElementById('shelterPhoto').files[0];
   let photoURL = null;
@@ -1277,7 +1277,7 @@ async function addShelterPost() {
 // ===== PROFILE =====
 async function loadProfile() {
   if (!currentUser || !currentUserData) return;
-  const name = currentUserData.displayName || currentUser.displayName || 'Kullan&#305;c&#305;';
+  const name = currentUserData.displayName || currentUser.displayName || 'Kullanıcı';
   document.getElementById('profileName').textContent = name;
   document.getElementById('profileCity').textContent = '📍 ' + (currentUserData.city || '');
   document.getElementById('profileEmail').textContent = currentUser.email;
@@ -1293,7 +1293,7 @@ async function loadProfile() {
   const snap = await db.collection('pets').where('ownerId','==',currentUser.uid).get();
   const list = document.getElementById('myPetsList');
   if (snap.empty) {
-    list.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600;padding:8px 0">Hen&#252;z hayvan eklemedin.</div>';
+    list.innerHTML = '<div style="color:var(--muted);font-size:14px;font-weight:600;padding:8px 0">Henüz hayvan eklemedin.</div>';
     return;
   }
   list.innerHTML = '';
@@ -1306,7 +1306,7 @@ async function loadProfile() {
         <div class="pet-item-img">${imgHtml}</div>
         <div class="pet-item-info">
           <div class="pet-item-name">${p.name} ${emoji}</div>
-          <div class="pet-item-detail">${p.breed||''} • ${p.age ? p.age+' ya&#351;&#305;nda' : ''} • ${p.city||''}</div>
+          <div class="pet-item-detail">${p.breed||''} • ${p.age ? p.age+' yaşında' : ''} • ${p.city||''}</div>
         </div>
         <button style="background:none;border:none;font-size:20px;cursor:pointer;color:#e74c3c" onclick="deletePet('${doc.id}')">🗑️</button>
       </div>`;
@@ -1314,7 +1314,7 @@ async function loadProfile() {
 }
 
 async function deletePet(petId) {
-  if (!confirm('Bu hayvan&#305; silmek istedi&#287;ine emin misin?')) return;
+  if (!confirm('Bu hayvanı silmek istediğine emin misin?')) return;
   await db.collection('pets').doc(petId).delete();
   loadProfile();
 }
@@ -1328,7 +1328,7 @@ async function addPet() {
   const bio = document.getElementById('petBio').value.trim();
   const err = document.getElementById('addPetError');
   err.classList.add('hidden');
-  if (!name) { err.textContent = 'Hayvan&#305;n ad&#305;n&#305; gir!'; err.classList.remove('hidden'); return; }
+  if (!name) { err.textContent = 'Hayvanın adını gir!'; err.classList.remove('hidden'); return; }
   
   const file = document.getElementById('petPhoto').files[0];
   let photoURL = null;
@@ -1366,9 +1366,9 @@ function loadNotifications() {
       snap.docs.forEach(doc => {
         const n = doc.data();
         let text = '';
-        if (n.type === 'match_request') text = `🐾 ${n.fromPetName} e&#351;le&#351;me iste&#287;i g&#246;nderdi!`;
-        if (n.type === 'match_accepted') text = `🎉 E&#351;le&#351;men kabul edildi!`;
-        panel.innerHTML += `<div class="notif-item"><div class="notif-icon">${n.type==='match_request'?'🐾':'🎉'}</div><div>${text}</div><button style="background:none;border:none;cursor:pointer;color:var(--primary);font-weight:700;font-size:12px" onclick="markRead('${doc.id}')">G&#246;rd&#252;m</button></div>`;
+        if (n.type === 'match_request') text = `🐾 ${n.fromPetName} eşleşme isteği gönderdi!`;
+        if (n.type === 'match_accepted') text = `🎉 Eşleşmen kabul edildi!`;
+        panel.innerHTML += `<div class="notif-item"><div class="notif-icon">${n.type==='match_request'?'🐾':'🎉'}</div><div>${text}</div><button style="background:none;border:none;cursor:pointer;color:var(--primary);font-weight:700;font-size:12px" onclick="markRead('${doc.id}')">Gördüm</button></div>`;
       });
     });
 }
