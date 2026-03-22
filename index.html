@@ -2555,11 +2555,9 @@ function swipePass() {
 async function createMatchRequest(pet1Id, pet2Id) {
   try {
     // Idempotency check
-    const existing = await db.collection('matches')
-      .where('pet1Id','==', pet1Id).where('pet2Id','==', pet2Id).get();
-    const existing2 = await db.collection('matches')
-      .where('pet1Id','==', pet2Id).where('pet2Id','==', pet1Id).get();
-    if (!existing.empty || !existing2.empty) return;
+    const matchId = [pet1Id, pet2Id].sort().join('_');
+    const existingSnap = await db.collection('matches').doc(matchId).get();
+    if (existingSnap.exists) return;
 
     const [p1Snap, p2Snap] = await Promise.all([
       db.collection('pets').doc(pet1Id).get(),
@@ -2569,7 +2567,7 @@ async function createMatchRequest(pet1Id, pet2Id) {
     if (!p1Snap.exists || !p2Snap.exists) return;
     const p1 = p1Snap.data(), p2 = p2Snap.data();
 
-    const matchRef = await db.collection('matches').add({
+    const matchRef = await db.collection('matches').doc(matchId).set({
       pet1Id, pet2Id,
       user1Id: p1.ownerId, user2Id: p2.ownerId,
       pet1Name: p1.name, pet2Name: p2.name,
