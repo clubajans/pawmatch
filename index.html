@@ -2492,6 +2492,7 @@ function setFilter(filter, el) {
 
 async function swipeLike(isSuper) {
   if (state.swipeIndex >= state.swipePets.length) return;
+   document.querySelectorAll('.swipe-btn').forEach(b => b.disabled = true);
   const pet  = state.swipePets[state.swipeIndex];
   const card = document.getElementById('currentCard');
 
@@ -2536,7 +2537,8 @@ async function swipeLike(isSuper) {
 
   state.swipeIndex++;
   setTimeout(renderSwipeCard, 320);
-}
+   document.querySelectorAll('.swipe-btn').forEach(b => b.disabled = false);
+
 
 function swipePass() {
   if (state.swipeIndex >= state.swipePets.length) return;
