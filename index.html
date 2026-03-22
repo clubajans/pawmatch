@@ -2432,7 +2432,7 @@ async function loadPetsForSwipe() {
       .filter(p => !likedIds.includes(p.id) && !myPetIds.includes(p.id));
 
     if (state.activeFilter !== 'all') {
-      state.swipePets = state.swipePets.filter(p => p.species === state.activeFilter);
+      state.swipePets = state.swipePets.filter(p => p.species?.toLowerCase() === state.activeFilter.toLowerCase());
     }
 
     state.swipeIndex = 0;
