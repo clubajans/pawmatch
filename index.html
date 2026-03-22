@@ -313,11 +313,8 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     </div>
     <!-- Login -->
     <div id="loginForm">
-      <button class="btn-google" onclick="doGoogleLogin()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        Google ile Giri&#351; Yap
-      </button>
-      <div class="auth-divider">veya</div>
+      
+      
       <div class="form-group"><label>E-posta</label><input type="email" id="loginEmail" placeholder="ornek@mail.com"></div>
       <div class="form-group"><label>&#350;ifre</label><input type="password" id="loginPass" placeholder="••••••••"></div>
       <div id="loginError" class="error-msg hidden"></div>
@@ -325,11 +322,8 @@ h1,h2,h3 { font-family: 'Righteous', sans-serif; }
     </div>
     <!-- Register -->
     <div id="registerForm" class="hidden">
-      <button class="btn-google" onclick="doGoogleLogin()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        Google ile Kay&#305;t Ol
-      </button>
-      <div class="auth-divider">veya e-posta ile</div>
+      
+      
       <div class="form-group"><label>Ad Soyad</label><input type="text" id="regName" placeholder="Ad&#305;n Soyad&#305;n"></div>
       <div class="form-group"><label>E-posta</label><input type="email" id="regEmail" placeholder="ornek@mail.com"></div>
       <div class="form-group"><label>&#350;ifre</label><input type="password" id="regPass" placeholder="En az 6 karakter"></div>
@@ -773,30 +767,39 @@ async function doRegister() {
 
 async function doGoogleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('email');
+  provider.addScope('profile');
   const err = document.getElementById('loginError');
   try {
-    await auth.signInWithRedirect(provider);
-  } catch(e) {
-    if (err) { err.textContent = 'Google ile giriş başarısız. Lütfen tekrar dene.'; err.classList.remove('hidden'); }
-  }
-}
-
-// Handle redirect result on page load
-auth.getRedirectResult().then(async (result) => {
-  if (result && result.user) {
+    // Try popup first
+    const result = await auth.signInWithPopup(provider);
     const user = result.user;
     const snap = await db.collection('users').doc(user.uid).get();
     if (!snap.exists) {
       await db.collection('users').doc(user.uid).set({
-        displayName: user.displayName || 'Kullanıcı',
+        displayName: user.displayName || 'Kullan&#305;c&#305;',
         email: user.email,
         city: '',
         photoURL: user.photoURL || null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
+  } catch(e) {
+    // If popup blocked, fallback to redirect
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+      try {
+        await auth.signInWithRedirect(provider);
+      } catch(e2) {
+        if (err) { err.textContent = 'Google giri&#351;i ba&#351;ar&#305;s&#305;z. L&#252;tfen tekrar dene.'; err.classList.remove('hidden'); }
+      }
+    } else {
+      console.error('Google login error:', e.code, e.message);
+      if (err) { err.textContent = 'Hata: ' + e.code; err.classList.remove('hidden'); }
+    }
   }
-}).catch(e => console.error('Redirect error:', e));
+}
+
+
 
 function doLogout() { auth.signOut(); }
 
