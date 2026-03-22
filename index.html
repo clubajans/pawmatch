@@ -2383,7 +2383,7 @@ async function loadNearbyAnimals() {
   const el = document.getElementById('nearbyList');
   try {
     const snap = await db.collection('pets')
-      .where('purpose','in',['eşleşme','arkadaşlık'])
+      .limit(8)
       .limit(6).get();
 
     if (snap.empty) { el.innerHTML = '<div style="font-size:11px;color:var(--text-3)">Yakında hayvan yok.</div>'; return; }
@@ -2424,7 +2424,7 @@ async function loadPetsForSwipe() {
 
     const snap = await db.collection('pets')
       .where('ownerId','!=', state.user.uid)
-      .where('purpose','in',['eşleşme','arkadaşlık'])
+      .limit(8)
       .orderBy('ownerId').limit(40).get();
 
     state.swipePets = snap.docs
