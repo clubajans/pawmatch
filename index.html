@@ -2204,19 +2204,32 @@ async function doGoogleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('email');
   provider.addScope('profile');
-  try {
-    const result = await auth.signInWithPopup(provider);
-    const user = result.user;
-    const snap = await db.collection('users').doc(user.uid).get();
-    if (!snap.exists) {
-      await db.collection('users').doc(user.uid).set({
-        displayName: user.displayName || 'Kullanıcı',
-        email: user.email, city: '',
-        photoURL: user.photoURL || null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+  tryimport { getRedirectResult } from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+
+getRedirectResult(auth)
+  .then(async (result) => {
+    if (result) {
+      const user = result.user;
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+
+      if (!snap.exists()) {
+        await setDoc(userRef, {
+          displayName: user.displayName || 'Kullanıcı',
+          email: user.email || '',
+          city: '',
+          photoURL: user.photoURL || null,
+          createdAt: serverTimestamp(),
+        });
+      }
+
+      console.log("Giriş başarılı:", user);
     }
-  } catch (e) {
+  })
+  .catch((error) => {
+    console.error("Hata:", error);
+  }); catch (e) {
     if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
       try { await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); } catch {}
     } else {
