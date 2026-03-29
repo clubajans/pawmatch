@@ -3358,4 +3358,28 @@ document.addEventListener('visibilitychange', () => {
 });
 </script>
 </body>
+   <script>
+// 1. doLogin hatasını çözen fonksiyon
+window.doLogin = function() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
+};
+
+// 2. switchAuthTab hatasını susturan fonksiyon
+window.switchAuthTab = function(tab) {
+    console.log("Sekme değiştirildi: " + tab);
+};
+
+// 3. Giriş dönüşünü yakalayan kod
+firebase.auth().getRedirectResult().then((result) => {
+    if (result && result.user) {
+        alert("Samsun PawMatch Ağına Hoş Geldin: " + result.user.displayName);
+    }
+}).catch((error) => {
+    if (error.code !== 'auth/none') {
+        console.error("Giriş Hatası:", error.message);
+    }
+});
+</script>
+
 </html>
