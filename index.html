@@ -3381,5 +3381,49 @@ firebase.auth().getRedirectResult().then((result) => {
     }
 });
 </script>
+<script src="https://www.gstatic.com"></script>
+<script src="https://www.gstatic.com"></script>
+<script src="https://www.gstatic.com"></script>
+
+<script>
+// 1. Firebase'i Güvenli Başlatma (Hata Almamak İçin)
+const config = {
+    apiKey: "AIzaSyChh9yW-L4pL8yH-L4pL8yH-L4pL8yH",
+    authDomain: "pawmatch-98959.firebaseapp.com",
+    projectId: "pawmatch-98959",
+    storageBucket: "pawmatch-98959.appspot.com",
+    messagingSenderId: "367123985122",
+    appId: "1:367123985122:web:656f4d2a76f2f0a8d6e7b3"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+}
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+// 2. Konsoldaki "doGoogleLogin" Hatasını Çözen Fonksiyon
+window.doGoogleLogin = function() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithRedirect(provider);
+};
+
+// 3. Diğer "doLogin" İhtimali İçin Yedek
+window.doLogin = function() {
+    window.doGoogleLogin();
+};
+
+// 4. Sekme Geçiş Hatasını Sustur
+window.switchAuthTab = function(tab) {
+    console.log("Sekme: " + tab);
+};
+
+// 5. Giriş Dönüşünü Yakala
+auth.getRedirectResult().then((result) => {
+    if (result && result.user) {
+        alert("Samsun PawMatch Ağına Hoş Geldin: " + result.user.displayName);
+    }
+}).catch((e) => console.error("Auth Hatası:", e.message));
+</script>
 
 </html>
