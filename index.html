@@ -1639,7 +1639,7 @@ html, body {
         <span class="nav-icon">🏠</span> Keşfet
       </div>
       <div class="nav-item" onclick="showView('matchesView')" id="nav-matches">
-        <span class="nav-icon">❤️</span> Eşleşmeler
+        <span class="nav-icon">❤️</span> Çiftleşmeler
       </div>
       <div class="nav-item" onclick="showView('mapView')" id="nav-map">
         <span class="nav-icon">🗺️</span> Harita
@@ -1648,7 +1648,7 @@ html, body {
         <span class="nav-icon">😿</span> Kayıp & Bulunan
       </div>
       <div class="nav-item" onclick="showView('shelterView')" id="nav-shelter">
-        <span class="nav-icon">🏠</span> Barınak
+        <span class="nav-icon">🏠</span> Yuva Arıyor
       </div>
       <div class="nav-item" onclick="showView('profileView')" id="nav-profile">
         <span class="nav-icon">👤</span> Profil
@@ -1690,7 +1690,7 @@ html, body {
           <button class="filter-chip active" onclick="setFilter('all',this)">Tümü</button>
           <button class="filter-chip" onclick="setFilter('kedi',this)">🐱 Kedi</button>
           <button class="filter-chip" onclick="setFilter('köpek',this)">🐶 Köpek</button>
-          <button class="filter-chip" onclick="setFilter('kuş',this)">🐦 Kuş</button>
+          <button class="filter-chip" onclick="setFilter('güvercin',this)">🐦 Güvercin</button>
           <button class="filter-chip" onclick="setFilter('tavşan',this)">🐰 Tavşan</button>
           <button class="filter-chip" onclick="setFilter('hamster',this)">🐹 Hamster</button>
           <button class="filter-chip" onclick="setFilter('diğer',this)">🐾 Diğer</button>
@@ -1702,8 +1702,8 @@ html, body {
 
         <div class="swipe-btns">
           <button class="swipe-btn pass" onclick="swipePass()" title="Geç">✕</button>
-          <button class="swipe-btn super" onclick="swipeLike(true)" title="Süper Beğen">⭐</button>
-          <button class="swipe-btn like" onclick="swipeLike(false)" title="Beğen">❤️</button>
+          <button class="swipe-btn super" onclick="swipeLike(true)" title="Beğen">⭐</button>
+          <button class="swipe-btn like" onclick="swipeLike(false)" title="Çiftleşme Talep">❤️</button>
         </div>
       </div>
 
@@ -1756,13 +1756,13 @@ html, body {
     <!-- ── MATCHES ── -->
     <div id="matchesView" class="view">
       <div class="view-header" style="padding-bottom:14px">
-        <div class="view-title">Eşleşmeler</div>
-        <div class="view-sub">İstekler, eşleşmeler ve beğeniler</div>
+        <div class="view-title">Çiftleşmeler</div>
+        <div class="view-sub">İstekler, Çiftleşmeler ve Beğeniler</div>
       </div>
       <div class="view-body" style="padding-top:0">
         <div class="tabs">
           <button class="tab active" onclick="switchMatchTab('requests',this)">İstekler</button>
-          <button class="tab" onclick="switchMatchTab('matches',this)">Eşleşmeler</button>
+          <button class="tab" onclick="switchMatchTab('matches',this)">Çiftleşmeler</button>
           <button class="tab" onclick="switchMatchTab('likes',this)">Beğeniler</button>
         </div>
         <div id="matchContent"><div class="loader"><div class="spinner"></div></div></div>
@@ -1795,7 +1795,7 @@ html, body {
       <div class="map-wrap">
         <div id="map"></div>
         <div class="map-legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div>Eşleşme</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div>Çiftleşme</div>
           <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Kayıp</div>
           <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Barınak</div>
           <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Arkadaşlık</div>
@@ -1874,7 +1874,7 @@ html, body {
   <!-- Bottom nav mobile -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="showView('homeView')" id="bnav-home"><span class="nav-icon">🏠</span>Keşfet</div>
-    <div class="nav-item" onclick="showView('matchesView')" id="bnav-matches"><span class="nav-icon">❤️</span>Eşleşme</div>
+    <div class="nav-item" onclick="showView('matchesView')" id="bnav-matches"><span class="nav-icon">❤️</span>Çiftleşme</div>
     <div class="nav-item" onclick="showView('mapView')" id="bnav-map"><span class="nav-icon">🗺️</span>Harita</div>
     <div class="nav-item" onclick="showView('lostView')" id="bnav-lost"><span class="nav-icon">😿</span>Kayıp</div>
     <div class="nav-item" onclick="showView('shelterView')" id="bnav-shelter"><span class="nav-icon">🏠</span>Barınak</div>
@@ -1901,7 +1901,7 @@ html, body {
       <select id="petSpecies">
         <option value="kedi">🐱 Kedi</option>
         <option value="köpek">🐶 Köpek</option>
-        <option value="kuş">🐦 Kuş</option>
+        <option value="kuş">🐦 Güvercin</option>
         <option value="tavşan">🐰 Tavşan</option>
         <option value="hamster">🐹 Hamster</option>
         <option value="balık">🐟 Balık</option>
@@ -1916,8 +1916,8 @@ html, body {
     <div class="form-group">
       <label>Amaç *</label>
       <div class="purpose-grid">
-        <div class="purpose-card active" data-purpose="eşleşme" onclick="selectPurpose(this)">
-          <div class="p-icon">❤️</div><div class="p-label">Eşleşme</div>
+        <div class="purpose-card active" data-purpose="çiftleşme" onclick="selectPurpose(this)">
+          <div class="p-icon">❤️</div><div class="p-label">Çifteşme</div>
         </div>
         <div class="purpose-card" data-purpose="arkadaşlık" onclick="selectPurpose(this)">
           <div class="p-icon">🤝</div><div class="p-label">Arkadaşlık</div>
@@ -1926,7 +1926,7 @@ html, body {
           <div class="p-icon">😿</div><div class="p-label">Kayıp</div>
         </div>
         <div class="purpose-card" data-purpose="barınak" onclick="selectPurpose(this)">
-          <div class="p-icon">🏠</div><div class="p-label">Barınak/Yuva</div>
+          <div class="p-icon">🏠</div><div class="p-label">Barınak/Yuva Arıyor</div>
         </div>
       </div>
     </div>
@@ -1958,7 +1958,7 @@ html, body {
     <div class="form-group"><label>Tür</label>
       <select id="lostSpecies">
         <option value="kedi">🐱 Kedi</option><option value="köpek">🐶 Köpek</option>
-        <option value="kuş">🐦 Kuş</option><option value="tavşan">🐰 Tavşan</option><option value="diğer">🐾 Diğer</option>
+        <option value="güvercin">🐦 Güvercin</option><option value="tavşan">🐰 Tavşan</option><option value="diğer">🐾 Diğer</option>
       </select>
     </div>
     <div class="form-group"><label>Açıklama</label><textarea id="lostDesc" placeholder="Nerede, ne zaman, özellikler..."></textarea></div>
@@ -2067,19 +2067,19 @@ const state = {
 };
 
 const SPECIES_EMOJI = {
-  kedi:'🐱', köpek:'🐶', kuş:'🐦',
+  kedi:'🐱', köpek:'🐶', güvercin:'🐦',
   tavşan:'🐰', hamster:'🐹', balık:'🐟', diğer:'🐾'
 };
 
 const PURPOSE_BADGE = {
-  eşleşme:   { label:'Eşleşme',    cls:'match'   },
+  eşleşme:   { label:'Çiftleşme',    cls:'match'   },
   arkadaşlık:{ label:'Arkadaşlık', cls:'friend'  },
   kayıp:     { label:'Kayıp',      cls:'lost'    },
   barınak:   { label:'Barınak',    cls:'shelter' },
 };
 
 const ONBOARDING_STEPS = [
-  { emoji:'🐾', title:'PawMatch\'e Hoş Geldin!',    desc:'Kedi ve köpekleri sahiplendiren, kayıp hayvanları bulan ve doğru sahipleriyle eşleştiren uygulama.' },
+  { emoji:'🐾', title:'PawMatch\'e Hoş Geldin!',    desc:'Kedi ve köpekleri sahiplendiren, kayıp hayvanları bulan , doğru sahipleriyle eşleştiren ve Cins hayvanınızı çiftleştirmede partner bulan uygulama.' },
   { emoji:'❤️', title:'Swipe ile Eşleş!',           desc:'Sağa kaydır veya ❤️ bas — karşı taraf da beğenirse eşleşirsiniz ve mesajlaşabilirsiniz.' },
   { emoji:'📍', title:'Gerçek Zamanlı Konum',        desc:'Yakınındaki hayvanları haritada gör, kayıp ilanlarını konumuna göre filtrele.' },
 ];
